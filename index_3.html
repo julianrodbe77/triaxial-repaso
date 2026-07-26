@@ -16,6 +16,7 @@
     --linea:#d4d1c2;
     --agua:#4a90b8;
     --rojo:#b0432f;
+    --azul:#3a72a4;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -136,6 +137,43 @@
   footer{background:var(--verde);color:rgba(246,244,236,.7);padding:32px 0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;text-align:center;letter-spacing:.03em;line-height:1.7}
   footer b{color:var(--ambar-soft)}
 
+  .plan-config,.ramp-config{display:flex;gap:18px;flex-wrap:wrap;align-items:end;margin-bottom:22px;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:18px 20px}
+  .plan-config label,.ramp-config label,.muestra-card label{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#8a8974;margin-bottom:6px}
+  .plan-config select,.ramp-config input,.muestra-card input{font-family:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:var(--papel);color:var(--tinta);width:130px}
+  .plan-config select{width:auto;min-width:260px}
+  .muestras-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:8px}
+  @media(max-width:800px){.muestras-grid{grid-template-columns:1fr}}
+  .muestra-card{border:1px solid var(--linea);border-radius:10px;padding:18px;background:#fff;border-left:4px solid var(--ambar)}
+  .muestra-card h5{color:var(--verde);margin-bottom:12px;font-size:16px}
+  .muestra-card .row{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;margin-bottom:8px;font-family:"IBM Plex Mono",monospace;color:#54544a}
+  .muestra-card .row b{color:var(--verde)}
+  .plan-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13.5px;background:#fff}
+  .plan-table th,.plan-table td{border:1px solid var(--linea);padding:8px 10px;text-align:center}
+  .plan-table th{background:var(--papel-2);font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#6b6a5c}
+  .plan-table td.gap-ok{color:var(--verde-claro);font-weight:600}
+  .plan-table td.gap-warn{color:var(--rojo);font-weight:600}
+  .plan-table .rowCheck{appearance:none;width:19px;height:19px;border:2px solid var(--verde-claro);border-radius:5px;cursor:pointer;position:relative}
+  .plan-table .rowCheck:checked{background:var(--verde);border-color:var(--verde)}
+  .plan-table .rowCheck:checked::after{content:"✓";position:absolute;color:#fff;font-size:12px;top:-2px;left:3px}
+  .plan-table tr:has(.rowCheck:checked){background:#f4f8ee}
+  .plan-table tr.bcheck-row{background:#fdf6e8}
+  .plan-table tr.bcheck-row td{font-weight:500}
+  .err-table{width:100%;border-collapse:collapse;font-size:14px}
+  .err-table td,.err-table th{border-top:1px dashed var(--linea);padding:10px 6px;text-align:left;vertical-align:top}
+  .err-table th{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;color:#6b6a5c;border-top:none}
+  .err-table td:first-child{font-weight:600;color:var(--tinta);width:32%}
+  .err-table td:nth-child(2){color:#54544a;width:34%}
+  .err-table td:last-child{color:var(--verde)}
+  .corte-block{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;margin-bottom:20px}
+  .corte-block table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+  .corte-block td,.corte-block th{border-top:1px dashed var(--linea);padding:8px 6px;text-align:left}
+  .corte-block th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;color:#8a5a10;border-top:none}
+
+  .diagram-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
+  .diagram-box{flex:1;min-width:260px;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:14px 16px}
+  .diagram-box svg{width:100%;height:auto;display:block}
+  .diagram-cap{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:#8a8974;margin-top:8px;text-align:center;letter-spacing:.02em}
+
   @media print{nav.tabs{display:none}section.panel{display:block!important;page-break-after:always}.cone{display:none}}
 </style>
 </head>
@@ -167,6 +205,8 @@
     <button data-tab="info">◈ Anatomía del montaje</button>
     <button data-tab="mohr">◐ Círculo de Mohr</button>
     <button data-tab="cards">⇄ Flashcards</button>
+    <button data-tab="fugas">⚠ Verificación de fugas</button>
+    <button data-tab="plan">🧪 Planeación de ensayo</button>
   </div>
 </nav>
 
@@ -325,6 +365,185 @@
   </div>
 </section>
 
+<section class="panel" id="fugas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Diagnóstico y control de calidad</div>
+      <h2>Verificación de fugas antes y durante el ensayo</h2>
+      <p>Si el circuito entre la presión de cámara y la contrapresión no está realmente cerrado, cada una avanza buscando su propio equilibrio hasta que el sistema toca el límite de carrera y salta la alarma. Verificar la estanqueidad <b>antes</b> de sellar la cámara evita perder un ensayo completo.</p>
+    </div>
+
+    <div class="tip">
+      <b>¿Por qué salta la alarma?</b> La contrapresión (agua interna, p. ej. ≈300 kPa) y la presión de cámara (p. ej. ≈10 kPa por encima) buscan cada una su propio nivel de equilibrio. Si hay una fuga —una manguerita mal ajustada, un pinchazo en la membrana, un o-ring mal sellado— una presión avanza y la otra retrocede sin freno hasta el límite del equipo.
+    </div>
+
+    <div class="info-grid" style="grid-template-columns:1fr 1fr;margin-top:24px">
+      <div class="part hl" style="margin:0">
+        <h5>Método 1 · Vacío directo</h5>
+        <p>Con la muestra ya montada (membrana, o-rings, cabezal) pero <b>sin cámara todavía</b>, se aplica succión con una bomba de vacío por uno de los extremos —cabezal o base—, del orden de 20-30 unidades, sin exagerar: las mangueras y conexiones no soportan un vacío muy alto. Se deja estabilizar, se cierra la salida y se apaga la bomba, dejando toda la muestra en vacío.</p>
+      </div>
+      <div class="part hl" style="margin:0">
+        <h5>Método 2 · Burbujador</h5>
+        <p>Se intercala entre la bomba de vacío y la muestra un <b>burbujador</b>: un frasco con agua hasta la mitad, con un tubito interno que llega hasta el fondo y una segunda toma que solo llega al espacio superior. Se conecta el vacío por el lado que <b>no</b> llega al fondo. Si hay una fuga que deja entrar aire, el agua del frasco <b>burbujea</b> de forma continua.</p>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:20px">
+      <b>Criterio de lectura:</b> si el vacío se mantiene estable (o el burbujeo cesa porque ya no entra más aire), el montaje está bien sellado. Si el vacío <b>cae</b> progresivamente (o el burbujeo <b>no cesa</b>), hay una fuga en algún punto. El diagnóstico no es concluyente en positivo, pero un resultado negativo (fuga detectada) sí es confiable.
+    </div>
+
+    <div class="phase open" style="margin-top:28px">
+      <div class="phase-head"><div class="num">!</div><h3>Si la fuga ya ocurrió durante el ensayo</h3><span class="stage">Remedio</span><div class="chev">›</div></div>
+      <div class="phase-body" style="max-height:900px">
+        <ul>
+          <li><input type="checkbox" id="fg0"><label for="fg0">Descargar el ensayo que no llegó a buen término; no se reintenta sobre la misma muestra ya afectada</label></li>
+          <li><input type="checkbox" id="fg1"><label for="fg1">Desmontar y desocupar la cámara: sacar la muestra, el agua y la campana</label></li>
+          <li><input type="checkbox" id="fg2"><label for="fg2">Revisar la membrana buscando un pinchazo o corte pequeño (basta uno solo para generar la fuga)</label></li>
+          <li><input type="checkbox" id="fg3"><label for="fg3">Revisar las mangueritas de conexión: a veces la fuga es solo por una que no quedó bien ajustada</label></li>
+          <li><input type="checkbox" id="fg4"><label for="fg4">Si el suelo tiene resistencia media o firme: colocar una <b>segunda membrana</b> encima, sin desmontar todo, para reforzar el sello</label></li>
+          <li><input type="checkbox" id="fg5"><label for="fg5">Si la membrana está claramente dañada: cambiarla por completo en vez de duplicarla</label></li>
+          <li><input type="checkbox" id="fg6"><label for="fg6">Volver a montar, recolocar los controladores/transductores y reiniciar el ensayo</label></li>
+        </ul>
+        <div class="tip">💡 Detectar la fuga <b>el mismo día</b> del montaje permite corregirla de inmediato y no perder tiempo de ensayo. En el caso de referencia, la fuga tardó cerca de <b>dos horas</b> en manifestarse y para ese punto ya no fue posible recuperar el recorrido del ensayo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="plan">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Diseño de la campaña · 3 cámaras independientes</div>
+      <h2>Planeación de ensayo — 3 muestras en paralelo</h2>
+      <p>Cada cámara tiene su propia unidad de presión/contrapresión, así que saturación, consolidación y corte corren en paralelo sin cuello de botella. Elige el tipo de ensayo del lote y genera la ruta de escalones respetando la brecha máxima CP−BP.</p>
+    </div>
+
+    <div class="plan-config">
+      <div>
+        <label>Tipo de ensayo del lote</label>
+        <select id="planTipo">
+          <option value="UU">UU — no consolidado, no drenado</option>
+          <option value="CU" selected>CU — consolidado, no drenado</option>
+          <option value="CD">CD — consolidado, drenado</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="planUUNote" class="tip" style="display:none">
+      <b>UU no lleva saturación ni consolidación con BP controlada.</b> Se monta la muestra y se aplica directamente una presión de cámara total (sin distinguir efectivo) por muestra, y se corta sin abrir drenaje. Las tres muestras se ensayan a tres presiones de cámara total distintas para trazar la envolvente total (φᵤ ≈ 0 en suelos saturados).
+    </div>
+
+    <div id="planSatBlock">
+      <div class="sec-head" style="margin-bottom:16px">
+        <div class="kicker">Etapa 1</div>
+        <h2 style="font-size:22px">Ruta de saturación</h2>
+      </div>
+      <div class="ramp-config">
+        <div><label>BP inicial (kPa)</label><input type="number" id="bpInicial" value="10"></div>
+        <div><label>Incremento por escalón (kPa)</label><input type="number" id="incremento" value="50"></div>
+        <div><label>Brecha máx. CP−BP (kPa)</label><input type="number" id="gapMax" value="10"></div>
+        <div><label>BP objetivo (kPa)</label><input type="number" id="bpObjetivo" value="300"></div>
+        <div><label>B-check intermedio cada N escalones</label><input type="number" id="intervaloB" value="3"></div>
+        <button class="btn sm" id="genRampa">↻ Generar escalones</button>
+      </div>
+      <div id="rampaResultado"></div>
+      <div class="tip" style="margin-top:14px">
+        <b>Regla de oro:</b> nunca dejar que CP se adelante a BP más que la brecha máxima definida arriba. Sube CP un poco, iguala con BP, y solo entonces das el siguiente escalón. Si BP se adelanta a CP, el efectivo cae a casi cero o negativo y la muestra puede hincharse; si CP se adelanta demasiado, la comprimes transitoriamente.
+      </div>
+
+      <div class="diagram-row">
+        <div class="diagram-box">
+          <svg viewBox="0 0 300 200">
+            <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
+            <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
+            <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">kPa</text>
+            <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">escalón →</text>
+            <polyline points="40,164 75,149 110,134 145,119 180,104 215,89 250,32" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
+            <polyline points="40,167 75,152 110,137 145,122 180,107 215,92" fill="none" stroke="var(--ambar)" stroke-width="2.5"/>
+            <polyline points="40,167 75,152 110,137 145,122 180,107 215,92 250,35" fill="none" stroke="var(--azul)" stroke-width="2" stroke-dasharray="5 3"/>
+            <line x1="250" y1="15" x2="250" y2="170" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="196" y="12" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B-check</text>
+            <circle cx="250" cy="32" r="3" fill="var(--verde)"/>
+            <circle cx="215" cy="92" r="3" fill="var(--ambar)"/>
+            <circle cx="250" cy="35" r="3" fill="var(--azul)"/>
+            <text x="252" y="35" font-size="9" fill="var(--verde)" font-family="IBM Plex Mono,monospace">CP</text>
+            <text x="252" y="95" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">BP</text>
+            <text x="204" y="52" font-size="9" fill="var(--azul)" font-family="IBM Plex Mono,monospace">PWP (B≈0,97)</text>
+          </svg>
+          <div class="diagram-cap">CP, BP y PWP: en escalones abiertos PWP sigue a BP; en el B-check (drenaje cerrado) PWP sube casi hasta CP si B es alto</div>
+        </div>
+        <div class="diagram-box">
+          <svg viewBox="0 0 300 200">
+            <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
+            <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
+            <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">B</text>
+            <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">check →</text>
+            <line x1="35" y1="28" x2="270" y2="28" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="200" y="24" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B objetivo = 0,95</text>
+            <polyline points="80,88 170,47 260,25" fill="none" stroke="var(--ambar)" stroke-width="2" stroke-dasharray="4 3"/>
+            <circle cx="80" cy="88" r="4" fill="var(--ambar)"/>
+            <circle cx="170" cy="47" r="4" fill="var(--ambar)"/>
+            <circle cx="260" cy="25" r="4" fill="var(--verde)"/>
+            <text x="62" y="105" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,55</text>
+            <text x="155" y="63" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,82</text>
+            <text x="245" y="14" font-size="8.5" fill="var(--verde)" font-family="IBM Plex Mono,monospace">0,97 ✓</text>
+          </svg>
+          <div class="diagram-cap">B esperado: tendencia creciente en cada check intermedio hasta superar 0,95</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:40px">
+      <div class="kicker" id="consKicker">Etapa 2</div>
+      <h2 id="consTitle">Consolidación — σ'3 por muestra</h2>
+    </div>
+    <div class="muestras-grid" id="muestrasGrid"></div>
+
+    <div class="diagram-row">
+      <div class="diagram-box" style="flex:1 1 100%">
+        <svg viewBox="0 0 620 200">
+          <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="45" y1="175" x2="45" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="10" y="30" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
+          <text x="545" y="192" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">tiempo →</text>
+          <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="595" y="178" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">→0</text>
+          <path d="M70,40 C160,55 220,100 280,135 C340,160 420,172 560,175" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
+          <line x1="270" y1="25" x2="270" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="252" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t50</text>
+          <line x1="440" y1="25" x2="440" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="422" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t100</text>
+        </svg>
+        <div class="diagram-cap">Exceso de presión de poros (Δu) esperado: cae progresivamente hasta ≈0 al abrir el drenaje (curva de Taylor / t50-t100)</div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:16px;border-color:var(--rojo)">
+      <b>⚠ Cuidado con el signo del volumen:</b> en consolidación, la convención habitual es <b>volumen positivo = agua saliendo</b> (la muestra se comprime porque el esfuerzo efectivo sube). Si en cambio ves <b>agua entrando</b> (volumen negativo) durante un escalón de consolidación, no es normal aquí —a diferencia de la saturación, donde el agua entrando sí es lo esperado—. Casi siempre significa que el esfuerzo efectivo bajó en vez de subir: revisa si en ese escalón <b>BP se adelantó a CP</b> (violando la brecha máxima), lo que hincha la muestra en vez de comprimirla.
+    </div>
+
+    <div class="sec-head" style="margin-top:40px">
+      <div class="kicker">Etapa 3</div>
+      <h2 id="corteTitle">Corte — comportamiento esperado en sensores</h2>
+    </div>
+    <div id="corteInfo"></div>
+
+    <div class="phase" style="margin-top:12px">
+      <div class="phase-head"><div class="num">⚠</div><h3>Tabla de errores comunes por síntoma</h3><div class="chev">›</div></div>
+      <div class="phase-body" style="max-height:900px">
+        <table class="err-table">
+          <tr><th>Síntoma en sensores</th><th>Causa probable</th><th>Acción</th></tr>
+          <tr><td>B no sube de ~0,8 aunque subas BP mucho</td><td>Aire atrapado / muestra parcialmente desaturada</td><td>Subir CP y BP en pasos iguales, más lento, más presión total</td></tr>
+          <tr><td>CP−BP se aleja de la brecha objetivo entre pasos</td><td>Ritmo de escalones descuidado</td><td>Reducir el paso; igualar BP antes de subir CP de nuevo</td></tr>
+          <tr><td>PWP no decae en consolidación</td><td>Drenaje obstruido o tiempo insuficiente</td><td>Verificar piedra porosa/papel filtro; esperar curva de Taylor completa</td></tr>
+          <tr><td>PWP inestable o fuera de rango en el corte</td><td>Fuga en línea de medición u o-ring</td><td>Chequeo de estanqueidad (vacío/burbujador) antes de repetir</td></tr>
+          <tr><td>PWP "plano" en CD pero con variación fuerte de volumen</td><td>Transductor posiblemente bloqueado</td><td>Verificar línea de drenaje y sensor por separado</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">Material de repaso · Ensayo triaxial · Colombia, Boogotà<br>v.0· material de estudio compartido</div>
 </footer>
@@ -412,7 +631,11 @@ const CARDS = [
   {tag:"Presión de poros",q:"¿La presión de poros es uniforme dentro de la muestra?",a:"No: es <b>mayor en el centro</b> y se disipa hacia los extremos, incluso en muestras pequeñas. El valor medido en el extremo sirve como control razonable."},
   {tag:"Sistema de presión",q:"¿Cómo se genera la presión en el equipo neumático?",a:"El compresor entrega <b>aire</b> regulado con manómetro; ese aire infla un balón/membrana interna que empuja el agua: convierte <b>presión neumática en hidráulica</b>. Los equipos modernos son directamente hidráulicos (bombas de presión-volumen)."},
   {tag:"Medición",q:"¿Qué se mide y con qué durante el corte?",a:"<b>Fuerza axial</b> (celda de carga), <b>deformación</b> (LVDT) y <b>presión de poros</b> (transductor), todo enviado al computador. En CD además se mide el <b>cambio de volumen</b>."},
-  {tag:"Datos finales",q:"¿Qué se hace con la muestra al desmontar?",a:"Se fotografía y se mide el <b>plano y ángulo de falla</b>, se toman dimensiones y se lleva al <b>horno</b>. Con el peso húmedo y seco se obtienen γ, γ_sat, relaciones de vacíos y grados de saturación inicial y final."}
+  {tag:"Datos finales",q:"¿Qué se hace con la muestra al desmontar?",a:"Se fotografía y se mide el <b>plano y ángulo de falla</b>, se toman dimensiones y se lleva al <b>horno</b>. Con el peso húmedo y seco se obtienen γ, γ_sat, relaciones de vacíos y grados de saturación inicial y final."},
+  {tag:"Verificación de fugas",q:"¿Por qué una fuga hace saltar la alarma del equipo?",a:"Porque la <b>presión de cámara</b> y la <b>contrapresión</b> buscan cada una su propio equilibrio. Si el circuito entre ambas no está cerrado (hay fuga), una avanza y la otra retrocede sin freno hasta el <b>límite de carrera</b> del equipo."},
+  {tag:"Verificación de fugas",q:"¿Cómo se verifica la estanqueidad del montaje antes de sellar la cámara?",a:"Con la muestra ya montada pero <b>sin cámara</b>, se aplica <b>vacío</b> (succión) por uno de los extremos, con un manómetro directo o con un <b>burbujador</b> intercalado entre la bomba y la muestra."},
+  {tag:"Verificación de fugas",q:"¿Cómo se interpreta el resultado de la prueba de vacío?",a:"Si el vacío se <b>mantiene estable</b> (o el burbujeo cesa), el montaje está bien sellado. Si el vacío <b>cae</b> (o el burbujeo no cesa), hay una fuga. Un resultado negativo (fuga) es confiable; uno positivo no es 100% concluyente."},
+  {tag:"Verificación de fugas",q:"Si se detecta una fuga a medio ensayo, ¿cuál es el remedio típico?",a:"Descargar el ensayo, desmontar y revisar membrana y mangueritas. Si el suelo es firme, se puede colocar <b>otra membrana encima</b> sin desarmar todo; si la membrana está dañada, se <b>cambia por completo</b> y se reinicia."}
 ];
 
 const tabBtns=document.querySelectorAll('nav.tabs button');
@@ -505,6 +728,199 @@ document.addEventListener('keydown',e=>{
   if(e.key===' '){e.preventDefault();card.classList.toggle('flip')}
 });
 renderCard();
+</script>
+<script>
+/* ---------- Módulo: Planeación de ensayo ---------- */
+const MUESTRAS = [
+  {id:'m1', nombre:'Muestra 1', sigma:50, cpUU:100},
+  {id:'m2', nombre:'Muestra 2', sigma:150, cpUU:200},
+  {id:'m3', nombre:'Muestra 3', sigma:300, cpUU:300}
+];
+
+const CORTE_INFO = {
+  UU:`<div class="corte-block">
+    <p>Drenaje <b>cerrado todo el ensayo</b>; no se controla BP durante el corte. La presión de cámara total es el único confinamiento.</p>
+    <table>
+      <tr><th>Sensor</th><th>Comportamiento esperado</th></tr>
+      <tr><td>PWP</td><td>No se usa para corregir esfuerzos (se trabaja en esfuerzos totales); puede registrarse mas no gobierna la trayectoria</td></tr>
+      <tr><td>CP</td><td>Constante durante todo el corte</td></tr>
+      <tr><td>Fuerza axial</td><td>Sube hasta un pico bien definido en suelos saturados; envolvente total con φᵤ≈0</td></tr>
+    </table>
+    <div class="diagram-row">
+      <div class="diagram-box" style="flex:1 1 100%">
+        <svg viewBox="0 0 620 190">
+          <line x1="45" y1="165" x2="590" y2="165" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="45" y1="165" x2="45" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="10" y="30" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="545" y="182" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M45,160 C110,90 150,55 190,50 C230,46 260,60 320,80" fill="none" stroke="var(--verde)" stroke-width="2.2"/>
+          <path d="M45,160 C120,105 170,75 215,68 C260,62 300,75 360,95" fill="none" stroke="var(--ambar)" stroke-width="2.2"/>
+          <path d="M45,160 C130,120 190,95 240,88 C290,82 335,92 400,110" fill="none" stroke="#8a5a10" stroke-width="2.2" stroke-dasharray="4 3"/>
+          <text x="325" y="83" font-size="9" fill="var(--verde)" font-family="IBM Plex Mono,monospace">M1 (menor CP)</text>
+          <text x="365" y="98" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">M2</text>
+          <text x="405" y="113" font-size="9" fill="#8a5a10" font-family="IBM Plex Mono,monospace">M3 (mayor CP)</text>
+        </svg>
+        <div class="diagram-cap">Esfuerzo desviador vs. deformación axial (esfuerzos totales): pico bien marcado, mayor q de falla a mayor presión de cámara</div>
+      </div>
+    </div>
+  </div>`,
+  CU:`<div class="corte-block">
+    <p>Drenaje <b>cerrado</b> durante el corte; el PWP se mide para reconstruir la trayectoria de esfuerzos efectivos.</p>
+    <table>
+      <tr><th>Sensor</th><th>Comportamiento esperado</th></tr>
+      <tr><td>PWP</td><td>Sube en suelos contractivos o baja (incluso negativo) en dilatantes; define σ' real durante el corte</td></tr>
+      <tr><td>CP</td><td>Constante (σ3 total fijo)</td></tr>
+      <tr><td>BP</td><td>Fija como referencia; no se ajusta activamente con válvula cerrada</td></tr>
+    </table>
+    <p style="margin-top:10px"><b>Error típico:</b> un PWP que se dispara sin control o sale de rango del transductor suele indicar fuga en la línea de medición más que comportamiento real del suelo (ver pestaña de fugas).</p>
+    <div class="diagram-row">
+      <div class="diagram-box">
+        <svg viewBox="0 0 300 190">
+          <line x1="40" y1="165" x2="275" y2="165" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="40" y1="165" x2="40" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="8" y="30" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="235" y="182" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,160 C90,95 120,65 150,60 C185,55 210,75 260,100" fill="none" stroke="var(--ambar)" stroke-width="2.2" stroke-dasharray="4 3"/>
+          <path d="M40,160 C100,110 150,75 200,55 C230,44 250,38 270,32" fill="none" stroke="var(--verde)" stroke-width="2.2"/>
+          <text x="180" y="52" font-size="8.5" fill="#b8811c" font-family="IBM Plex Mono,monospace">contractivo</text>
+          <text x="185" y="30" font-size="8.5" fill="var(--verde)" font-family="IBM Plex Mono,monospace">dilatante</text>
+        </svg>
+        <div class="diagram-cap">q vs εa: pico y reblandecimiento (contractivo) vs. endurecimiento continuo (dilatante)</div>
+      </div>
+      <div class="diagram-box">
+        <svg viewBox="0 0 300 190">
+          <line x1="40" y1="95" x2="275" y2="95" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="40" y1="165" x2="40" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="8" y="30" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
+          <text x="235" y="182" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <text x="252" y="92" font-size="8" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <path d="M40,95 C100,60 150,45 200,42 C230,40 250,42 270,45" fill="none" stroke="var(--ambar)" stroke-width="2.2" stroke-dasharray="4 3"/>
+          <path d="M40,95 C90,80 120,60 150,95 C180,125 220,140 270,145" fill="none" stroke="var(--verde)" stroke-width="2.2"/>
+          <text x="205" y="38" font-size="8.5" fill="#b8811c" font-family="IBM Plex Mono,monospace">contractivo (+)</text>
+          <text x="190" y="152" font-size="8.5" fill="var(--verde)" font-family="IBM Plex Mono,monospace">dilatante (−)</text>
+        </svg>
+        <div class="diagram-cap">Δu vs εa: sube y se mantiene positivo (contractivo) o cae a negativo tras un repunte (dilatante)</div>
+      </div>
+    </div>
+  </div>`,
+  CD:`<div class="corte-block">
+    <p>Drenaje <b>abierto</b> durante el corte; se mide cambio de volumen en vez de exceso de poros. Velocidad lenta para permitir la disipación continua.</p>
+    <table>
+      <tr><th>Sensor</th><th>Comportamiento esperado</th></tr>
+      <tr><td>PWP</td><td>Debe mantenerse ≈ constante, igual al BP aplicado, durante todo el corte</td></tr>
+      <tr><td>CP / BP</td><td>Ambos constantes; BP actúa como referencia de drenaje real abierto</td></tr>
+      <tr><td>Cambio de volumen</td><td>Se registra en paralelo a la deformación axial</td></tr>
+    </table>
+    <p style="margin-top:10px"><b>Error típico:</b> si el PWP muestra variaciones apreciables (no queda plano en BP), la velocidad de deformación es demasiado rápida para el drenaje real: hay que bajarla.</p>
+    <div class="diagram-row">
+      <div class="diagram-box">
+        <svg viewBox="0 0 300 190">
+          <line x1="40" y1="165" x2="275" y2="165" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="40" y1="165" x2="40" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="8" y="30" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="235" y="182" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,160 C110,110 170,80 220,68 C245,62 260,58 270,55" fill="none" stroke="var(--verde)" stroke-width="2.2"/>
+          <text x="150" y="150" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">más dúctil, sin pico marcado</text>
+        </svg>
+        <div class="diagram-cap">q vs εa: endurecimiento gradual hasta un valor último, sin caída brusca</div>
+      </div>
+      <div class="diagram-box">
+        <svg viewBox="0 0 300 190">
+          <line x1="40" y1="55" x2="275" y2="55" stroke="var(--linea)" stroke-width="1"/>
+          <line x1="40" y1="165" x2="40" y2="20" stroke="var(--linea)" stroke-width="1"/>
+          <text x="8" y="30" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">εv</text>
+          <text x="235" y="182" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <text x="252" y="52" font-size="8" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <path d="M40,55 C100,80 150,110 200,130 C230,142 250,148 270,152" fill="none" stroke="var(--verde)" stroke-width="2.2"/>
+          <text x="150" y="145" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">compresión continua (NC típico)</text>
+        </svg>
+        <div class="diagram-cap">Cambio de volumen vs εa: compresión progresiva (suelo NC); en arenas densas puede seguir dilatancia tras un tramo inicial</div>
+      </div>
+    </div>
+  </div>`
+};
+
+function generarRampa(){
+  const bpI=+document.getElementById('bpInicial').value;
+  const inc=+document.getElementById('incremento').value;
+  const gap=+document.getElementById('gapMax').value;
+  const bpObj=+document.getElementById('bpObjetivo').value;
+  const intervaloB=+document.getElementById('intervaloB').value||0;
+  let bp=bpI, steps=[{n:'Asiento',cp:bp+gap,bp:bp}];
+  let n=1, contador=0, midCount=0;
+  while(bp<bpObj){
+    bp=Math.min(bp+inc,bpObj);
+    steps.push({n:n,cp:bp+gap,bp:bp});
+    n++; contador++;
+    if(intervaloB>0 && contador%intervaloB===0 && bp<bpObj){
+      midCount++;
+      steps.push({n:'B-int '+midCount, cp:bp+gap+30, bp:'cerrado', bmid:true});
+    }
+  }
+  steps.push({n:'B-check final',cp:steps[steps.length-1].cp+50,bp:'cerrado',bcheck:true});
+  const rows=steps.map((s,i)=>{
+    const chk=`<td><input type="checkbox" class="rowCheck" id="chk${i}"></td>`;
+    if(s.bcheck){
+      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>Subir CP un Δ conocido (+50 kPa); confirmar B = ΔPWP/ΔCP ≥ 0,95</td>${chk}</tr>`;
+    }
+    if(s.bmid){
+      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>Punto de control: Δ+30 kPa, drenaje cerrado. B parcial debe ir <b>creciendo</b> hacia ≥0,95; si se estanca, hay que revisar antes de seguir</td>${chk}</tr>`;
+    }
+    const g=s.cp-s.bp;
+    const cls=g<=gap?'gap-ok':'gap-warn';
+    return `<tr><td>${s.n}</td><td>${s.cp}</td><td>${s.bp}</td><td class="${cls}">${g}</td><td>${s.n==='Asiento'?'Primer contacto tras succión y cierre de cámara':'Subir CP, luego BP hasta igualar la brecha; verificar que PWP se estabilizó antes de avanzar'}</td>${chk}</tr>`;
+  }).join('');
+  document.getElementById('rampaResultado').innerHTML=
+    `<table class="plan-table"><tr><th>Escalón</th><th>CP (kPa)</th><th>BP (kPa)</th><th>CP−BP</th><th>Acción</th><th>✓</th></tr>${rows}</table>`;
+  actualizarMuestras();
+}
+
+function actualizarMuestras(){
+  const tipo=document.getElementById('planTipo').value;
+  const grid=document.getElementById('muestrasGrid');
+  const bpObj=+document.getElementById('bpObjetivo').value||300;
+  grid.innerHTML='';
+  MUESTRAS.forEach(m=>{
+    const card=document.createElement('div');
+    card.className='muestra-card';
+    if(tipo==='UU'){
+      card.innerHTML=`<h5>${m.nombre}</h5>
+        <label>Presión de cámara total (kPa)</label>
+        <input type="number" value="${m.cpUU}" data-id="${m.id}" class="cpUUInput">
+        <div class="row" style="margin-top:10px">Sin BP ni consolidación (UU)</div>`;
+    } else {
+      card.innerHTML=`<h5>${m.nombre}</h5>
+        <label>σ'3 objetivo (kPa)</label>
+        <input type="number" value="${m.sigma}" data-id="${m.id}" class="sigmaInput">
+        <div class="row" style="margin-top:12px">BP objetivo <b>${bpObj} kPa</b></div>
+        <div class="row">CP en consolidación <b class="cpConsol">${bpObj+m.sigma} kPa</b></div>`;
+    }
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.sigmaInput').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const sigma=+e.target.value||0;
+      e.target.closest('.muestra-card').querySelector('.cpConsol').textContent=(bpObj+sigma)+' kPa';
+    });
+  });
+}
+
+function actualizarTipoEnsayo(){
+  const tipo=document.getElementById('planTipo').value;
+  const esUU=tipo==='UU';
+  document.getElementById('planUUNote').style.display=esUU?'block':'none';
+  document.getElementById('planSatBlock').style.display=esUU?'none':'block';
+  document.getElementById('consKicker').textContent=esUU?'Cámara':'Etapa 2';
+  document.getElementById('consTitle').textContent=esUU?'Presiones de cámara por muestra':"Consolidación — σ'3 por muestra";
+  document.getElementById('corteTitle').textContent=`Corte — comportamiento esperado en sensores (${tipo})`;
+  document.getElementById('corteInfo').innerHTML=CORTE_INFO[tipo];
+  actualizarMuestras();
+}
+
+document.getElementById('planTipo').addEventListener('change',actualizarTipoEnsayo);
+document.getElementById('genRampa').addEventListener('click',generarRampa);
+actualizarTipoEnsayo();
+generarRampa();
 </script>
 </body>
 </html>
