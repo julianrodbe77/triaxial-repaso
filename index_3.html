@@ -521,6 +521,54 @@ function saveState(){
 })();
 
 /* ---------- Diagramas y contenido técnico embebido dentro de cada fase ---------- */
+const PERC_DIAGRAM = `<div class="diagram-row" style="margin:18px 20px 0">
+  <div class="diagram-box">
+    <svg viewBox="0 0 260 300">
+      <rect x="35" y="20" width="190" height="250" rx="6" fill="none" stroke="var(--linea)" stroke-width="1.5"/>
+      <text x="130" y="14" font-size="8.5" fill="#8a8974" text-anchor="middle" font-family="IBM Plex Mono,monospace">cámara con agua a CP</text>
+      <rect x="88" y="90" width="84" height="120" rx="2" fill="#c9a878" stroke="#8a6a3f" stroke-width="1.5"/>
+      <rect x="82" y="88" width="6" height="124" rx="3" fill="#b0432f" opacity=".5"/>
+      <rect x="172" y="88" width="6" height="124" rx="3" fill="#b0432f" opacity=".5"/>
+      <rect x="84" y="210" width="92" height="12" rx="2" fill="#cdd6dc" stroke="#4a90b8" stroke-width="1.2"/>
+      <rect x="84" y="78" width="92" height="12" rx="2" fill="#cdd6dc" stroke="#4a90b8" stroke-width="1.2"/>
+      <path d="M130 205 L130 100" stroke="#4a90b8" stroke-width="2.5" marker-end="url(#pfl)"/>
+      <path d="M108 205 L108 100" stroke="#4a90b8" stroke-width="1.6" opacity=".55" marker-end="url(#pfl)"/>
+      <path d="M152 205 L152 100" stroke="#4a90b8" stroke-width="1.6" opacity=".55" marker-end="url(#pfl)"/>
+      <circle cx="119" cy="150" r="3.4" fill="none" stroke="#6b6a5c" stroke-width="1"/>
+      <circle cx="141" cy="126" r="2.6" fill="none" stroke="#6b6a5c" stroke-width="1"/>
+      <circle cx="126" cy="112" r="2.2" fill="none" stroke="#6b6a5c" stroke-width="1"/>
+      <circle cx="130" cy="66" r="3" fill="none" stroke="#6b6a5c" stroke-width="1"/>
+      <circle cx="140" cy="52" r="2.4" fill="none" stroke="#6b6a5c" stroke-width="1"/>
+      <path d="M20 216 L84 216" stroke="#4a90b8" stroke-width="2" marker-end="url(#pfl)"/>
+      <text x="20" y="232" font-size="8" fill="#2f6a8c" font-family="IBM Plex Mono,monospace">entrada</text>
+      <text x="20" y="242" font-size="8" fill="#2f6a8c" font-family="IBM Plex Mono,monospace">BP + Δ</text>
+      <path d="M176 84 L240 84" stroke="#4a90b8" stroke-width="2" marker-end="url(#pfl)"/>
+      <text x="196" y="72" font-size="8" fill="#2f6a8c" font-family="IBM Plex Mono,monospace">salida BP</text>
+      <text x="196" y="62" font-size="8" fill="#6b6a5c" font-family="IBM Plex Mono,monospace">↑ burbujas</text>
+      <text x="130" y="288" font-size="8.5" fill="var(--rojo)" text-anchor="middle" font-family="IBM Plex Mono,monospace">CP &gt; entrada &gt; salida</text>
+      <defs><marker id="pfl" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#4a90b8"/></marker></defs>
+    </svg>
+    <div class="diagram-cap">Flujo siempre <b>de abajo hacia arriba</b>: el aire es más liviano y sale arrastrado por la salida superior</div>
+  </div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 300 300">
+      <line x1="45" y1="250" x2="280" y2="250" stroke="var(--linea)" stroke-width="1"/>
+      <line x1="45" y1="250" x2="45" y2="25" stroke="var(--linea)" stroke-width="1"/>
+      <text x="10" y="34" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">aire</text>
+      <text x="10" y="46" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">libre</text>
+      <text x="196" y="266" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">vol. percolado →</text>
+      <path d="M50,45 C95,80 130,150 175,200 C210,232 245,243 275,246" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
+      <line x1="45" y1="246" x2="280" y2="246" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="150" y1="25" x2="150" y2="250" stroke="var(--ambar)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <text x="156" y="38" font-size="8.5" fill="#b8811c" font-family="IBM Plex Mono,monospace">≈ 2 V_v</text>
+      <circle cx="175" cy="200" r="3.5" fill="var(--ambar)"/>
+      <text x="182" y="196" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">sin burbujas visibles</text>
+      <text x="60" y="278" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">la percolación NO retira el aire disuelto</text>
+    </svg>
+    <div class="diagram-cap">El aire libre cae rápido al inicio y luego se estanca: a partir de ahí solo la <b>contrapresión</b> disuelve el resto</div>
+  </div>
+</div>`;
+
 const SAT_DIAGRAMS = `<div class="diagram-row" style="margin:18px 20px 0">
   <div class="diagram-box">
     <svg viewBox="0 0 300 200">
@@ -588,7 +636,10 @@ const ERROR_TABLE_HTML = `<div style="margin:20px 20px 0">
   <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--ambar);margin-bottom:8px">Tabla de errores comunes por síntoma</div>
   <table class="err-table">
     <tr><th>Síntoma en sensores</th><th>Causa probable</th><th>Acción</th></tr>
-    <tr><td>B no sube de ~0,8 aunque subas BP mucho</td><td>Aire atrapado / muestra parcialmente desaturada</td><td>Subir CP y BP en pasos iguales, más lento, más presión total</td></tr>
+    <tr><td>B no sube de ~0,8 aunque subas BP mucho</td><td>Aire atrapado / muestra parcialmente desaturada</td><td>Subir CP y BP en pasos iguales, más lento, más presión total; revisar si la percolación previa fue suficiente</td></tr>
+    <tr><td>En percolación el agua sale sin burbujas casi de inmediato</td><td>Posible cortocircuito: el agua pasa por fuera de la muestra (membrana mal sellada o CP insuficiente)</td><td>Verificar que CP domine sobre entrada y salida, y revisar o-rings antes de dar por buena la percolación</td></tr>
+    <tr><td>Sale agua turbia o con finos durante la percolación</td><td>Gradiente demasiado alto: migración de partículas</td><td>Bajar el diferencial de inmediato; si la pérdida fue apreciable, el espécimen queda comprometido</td></tr>
+    <tr><td>La percolación no produce flujo apreciable</td><td>Suelo de muy baja permeabilidad o piedras porosas taponadas</td><td>Verificar piedras y papel filtro; si el suelo es muy fino, depender de la contrapresión en vez de forzar el gradiente</td></tr>
     <tr><td>CP−BP se aleja de la brecha objetivo entre pasos</td><td>Ritmo de escalones descuidado</td><td>Reducir el paso; igualar BP antes de subir CP de nuevo</td></tr>
     <tr><td>PWP no decae en consolidación</td><td>Drenaje obstruido o tiempo insuficiente</td><td>Verificar piedra porosa/papel filtro; esperar curva de Taylor completa</td></tr>
     <tr><td>PWP inestable o fuera de rango en el corte</td><td>Fuga en línea de medición u o-ring</td><td>Chequeo de estanqueidad (vacío/burbujador) antes de repetir</td></tr>
@@ -647,6 +698,26 @@ const NORMA_REQ = {
       'Verificar que la membrana no tenga perforaciones antes de sellar; usar <b>dos o-rings por extremo</b>.',
       'Purgar completamente el aire de las <b>líneas de drenaje y del medidor de cambio de volumen</b>: el aire atrapado se lee como cambio de volumen falso.',
       'Usar agua <b>desaireada</b> para el llenado; el aire disuelto retrasa la saturación por contrapresión.'
+    ]
+  },
+  percolacion:{
+    CU:[
+      'La percolación es un <b>paso preparatorio permitido</b>, no obligatorio: su función es retirar el aire libre antes de la saturación por contrapresión, acortándola de forma sustancial.',
+      'Debe mantenerse un <b>esfuerzo efectivo pequeño pero positivo</b> durante todo el barrido: la presión de cámara siempre por encima de las presiones de entrada y salida.',
+      'El diferencial entre entrada y salida debe ser <b>el mínimo que produzca flujo</b>. Un gradiente excesivo provoca <b>migración de finos</b> y altera la fábrica del suelo, invalidando el ensayo.',
+      'Usar exclusivamente <b>agua desaireada</b>: percolar con agua sin desairear introduce aire en lugar de retirarlo.',
+      'El flujo debe ser <b>ascendente</b> (entrada por la base, salida por el cabezal) para que el aire sea arrastrado en el sentido en que naturalmente asciende.',
+      'En suelos de <b>muy baja permeabilidad</b> la percolación puede ser impracticablemente lenta; en ese caso se depende principalmente de la contrapresión.',
+      'La percolación <b>no sustituye</b> la verificación con el parámetro B: la saturación se sigue comprobando con B ≥ 0,95.'
+    ],
+    CD:[
+      'La percolación es un <b>paso preparatorio permitido</b>, no obligatorio: su función es retirar el aire libre antes de la saturación por contrapresión.',
+      'Debe mantenerse un <b>esfuerzo efectivo pequeño pero positivo</b>: la presión de cámara siempre por encima de las presiones de entrada y salida.',
+      'El diferencial entre entrada y salida debe ser <b>el mínimo que produzca flujo</b>. Un gradiente excesivo provoca <b>migración de finos</b> y altera la fábrica del suelo.',
+      'Usar exclusivamente <b>agua desaireada</b>.',
+      'El flujo debe ser <b>ascendente</b> (entrada por la base, salida por el cabezal).',
+      'En CD el aire residual es especialmente crítico: falsea el <b>cambio de volumen</b> medido durante el corte, que es la variable de estado del ensayo.',
+      'La percolación <b>no sustituye</b> la verificación con el parámetro B.'
     ]
   },
   saturacion:{
@@ -778,9 +849,19 @@ function buildFases(tipo){
   ], tip:'El agua entra por abajo y <b>desplaza el aire</b> hacia la válvula de purga superior. Usar <b>agua desaireada</b> evita burbujas. ⚠ El orden entre "aplicar presión de cámara" y "liberar el vacío" es el error de técnica más común en este paso.', extra:(esUU?(UU_NOTE_HTML+muestrasGridHtml('cpUU')):'')+astmBlock('cierre',tipo)});
 
   if(!esUU){
+    fases.push({key:'percolacion', fase:'Percolación (barrido de aire)', etapa:'Etapa 1a', pasos:[
+      'Aplicar primero una presión de cámara pequeña (~40 kPa) y verificar que <b>CP quede siempre por encima</b> de las presiones de entrada y salida',
+      'Conectar la <b>entrada por la base</b> y la <b>salida por el cabezal</b>: el flujo debe ir de abajo hacia arriba para arrastrar el aire',
+      'Opcional pero muy eficaz: percolar primero <b>CO₂</b> a baja presión durante unos minutos, para desplazar el aire del espacio poroso',
+      'Percolar <b>agua desaireada</b> aplicando un diferencial pequeño entre entrada y salida (del orden de 5–10 kPa)',
+      '<b>No aumentar el diferencial para acelerar</b>: un gradiente alto migra finos, tapona las piedras porosas y altera la fábrica del suelo',
+      'Observar la salida superior hasta que el agua salga <b>sin burbujas</b> de forma sostenida',
+      'Registrar el volumen de agua percolada (referencia práctica: del orden de <b>2 volúmenes de vacíos</b> o más)',
+      'Cerrar la salida y dejar el sistema equilibrado antes de iniciar los escalones de contrapresión'
+    ], tip:'La percolación <b>solo barre el aire libre</b> de los poros, las piedras y las líneas; el aire <b>disuelto</b> no se va con el flujo y es lo que retira después la contrapresión. Hacerla bien acorta muchísimo la etapa de saturación. El <b>CO₂</b> funciona porque es del orden de 30 veces más soluble en agua que el aire: el gas que quede atrapado se disuelve mucho más rápido al aplicar contrapresión.', extra:PERC_DIAGRAM+astmBlock('percolacion',tipo)});
+
     fases.push({key:'saturacion', fase:'Saturación', etapa:'Etapa 1', pasos:[
-      'Aplicar presión por la parte inferior para empujar agua de abajo hacia arriba',
-      'Dejar purgar hasta expulsar el aire de la muestra',
+      'Partir de la muestra ya percolada, con las líneas purgadas y el sistema equilibrado',
       'Generar y seguir la ruta de escalones CP/BP configurada abajo, esperando que la presión de poros se estabilice antes de cada escalón',
       'Cerrar la válvula de drenaje para medir el parámetro B de Skempton',
       'Incrementar la presión de cámara un valor conocido (ej. 50 kPa) y leer el cambio de presión de poros',
@@ -834,6 +915,16 @@ const PARTS = [
 ];
 
 const FORMULAS = [
+  {etapa:'Percolación · Etapa 1a', t:'Volumen de vacíos a percolar',
+   eq:'<i>V</i><sub>v</sub> <span class="op">=</span> <i>V</i> · <span class="frac"><span class="num"><i>e</i></span><span class="den">1 <span class="op">+</span> <i>e</i></span></span>',
+   vars:[['V_v','volumen de vacíos de la muestra, cm³'],['V','volumen total de la muestra, cm³'],['e','relación de vacíos inicial']],
+   nota:'Sirve para dimensionar la percolación: como referencia práctica se hace circular del orden de <b>2 V<sub>v</sub> o más</b> de agua desaireada. El criterio de parada real es que el agua salga <b>sin burbujas</b> de forma sostenida, no un volumen fijo.'},
+
+  {etapa:'Percolación · Etapa 1a', t:'Gradiente hidráulico del barrido',
+   eq:'<i>i</i> <span class="op">=</span> <span class="frac"><span class="num">Δ<i>h</i></span><span class="den"><i>L</i></span></span> <span class="op">=</span> <span class="frac"><span class="num">Δ<i>p</i></span><span class="den">γ<sub>w</sub> · <i>L</i></span></span>',
+   vars:[['i','gradiente hidráulico (adimensional)'],['Δp','diferencial de presión entrada − salida, kPa'],['γ_w','peso unitario del agua, 9,81 kN/m³'],['L','altura de la muestra, m']],
+   nota:'Mantenerlo <b>bajo</b>. Un gradiente alto acelera el barrido pero <b>arrastra los finos</b>, tapona las piedras porosas y altera la fábrica: el suelo que se termina ensayando ya no es el que se muestreó.'},
+
   {etapa:'Saturación · Etapa 1', t:'Parámetro B de Skempton',
    eq:'<i>B</i> <span class="op">=</span> <span class="frac"><span class="num">Δ<i>u</i></span><span class="den">Δσ<sub>3</sub></span></span>',
    vars:[['B','parámetro de saturación (adimensional)'],['Δu','cambio en la presión de poros medido, kPa'],['Δσ₃','incremento aplicado a la presión de cámara, kPa']],
@@ -914,6 +1005,11 @@ const MOHR = [
 
 const CARDS = [
   {tag:"Etapas",q:"¿Cuáles son las tres etapas del ensayo triaxial?",a:"<b>Saturación</b> (llenar de agua los poros y verificar con B de Skempton), <b>consolidación</b> (isotrópica, bajo un esfuerzo efectivo definido) y <b>falla</b> (corte aplicando el esfuerzo desviador)."},
+  {tag:"Percolación",q:"¿Qué es la percolación y qué la diferencia de la saturación por contrapresión?",a:"Es hacer circular <b>agua desaireada a través de la muestra</b> (de abajo hacia arriba) para <b>barrer el aire libre</b> de los poros, las piedras porosas y las líneas. Solo retira aire <b>libre</b>; el aire <b>disuelto</b> lo elimina después la <b>contrapresión</b>. Son etapas complementarias, no alternativas."},
+  {tag:"Percolación",q:"¿Por qué la percolación va de abajo hacia arriba y no al revés?",a:"Porque el aire es más liviano y <b>tiende a ascender</b>. Si se percola en sentido descendente, el aire queda <b>atrapado</b> en la parte superior en vez de ser arrastrado hacia la salida."},
+  {tag:"Percolación",q:"¿Por qué no se puede acelerar la percolación subiendo el diferencial de presión?",a:"Porque un gradiente alto provoca <b>migración de finos</b>: arrastra partículas, tapona las piedras porosas y <b>altera la fábrica del suelo</b>. El espécimen que se termina ensayando ya no representa al que se muestreó."},
+  {tag:"Percolación",q:"¿Para qué se percola CO₂ antes del agua?",a:"Porque el CO₂ es del orden de <b>30 veces más soluble</b> en agua que el aire. Al desplazar el aire de los poros con CO₂, el gas que quede atrapado <b>se disuelve mucho más rápido</b> al aplicar la contrapresión, acortando notablemente la saturación."},
+  {tag:"Percolación",q:"Durante la percolación, ¿qué relación deben tener CP, la entrada y la salida?",a:"<b>CP > entrada > salida</b>. La presión de cámara debe estar siempre por encima para mantener la membrana sellada contra la muestra y conservar un <b>esfuerzo efectivo pequeño pero positivo</b>. Si CP no domina, el agua se <b>escurre por fuera</b> de la muestra y el flujo 'limpio' es un falso positivo."},
   {tag:"Saturación",q:"¿Qué es el parámetro B de Skempton y para qué sirve?",a:"Es <b>B = Δu / Δσ₃</b>: se cierra el drenaje, se sube la presión de cámara un valor conocido y se mide el aumento de presión de poros. Si el suelo está saturado, el agua (incompresible) toma casi todo el incremento y <b>B ≈ 1</b>. Confirma la saturación."},
   {tag:"Saturación",q:"¿Cómo se acelera la saturación de la muestra?",a:"Con <b>agua desaireada</b> y subiendo la presión externa e interna <b>simultáneamente</b> (mismo valor). Al no cambiar el esfuerzo efectivo no se altera la fábrica, pero la alta presión disuelve el aire en el agua."},
   {tag:"Consolidación",q:"¿En qué se diferencia la consolidación del triaxial de la del corte directo?",a:"En el corte directo es <b>unidimensional</b>; en el triaxial es <b>isotrópica</b>, porque la presión de cámara comprime la muestra por todos lados por igual."},
