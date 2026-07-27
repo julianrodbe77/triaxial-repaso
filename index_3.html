@@ -166,6 +166,26 @@
   .plan-table tr:has(.rowCheck:checked){background:#f4f8ee}
   .plan-table tr.bcheck-row{background:#fdf6e8}
   .plan-table tr.bcheck-row td{font-weight:500}
+  .dec-table{width:100%;border-collapse:collapse;font-size:14px;background:#fff;margin-top:8px}
+  .dec-table th,.dec-table td{border:1px solid var(--linea);padding:10px 12px;text-align:left;vertical-align:top}
+  .dec-table th{background:var(--papel-2);font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#6b6a5c}
+  .dec-table td{color:#54544a}
+  .dec-table td b{color:var(--verde-claro)}
+  .dec-table td:first-child{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--verde);font-weight:600;width:24%}
+  .dec-table td:last-child{width:28%;font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:#fbfaf5}
+  .dec-stop{margin:14px 20px 0;padding:14px 18px;border-left:3px solid var(--rojo);background:#fdf3f0;border-radius:0 6px 6px 0}
+  .dec-stop h5{font-size:14px;color:var(--rojo);margin-bottom:8px}
+  .dec-stop ul{list-style:none;font-size:14px;color:#7d3324}
+  .dec-stop li{padding:3px 0 3px 18px;position:relative}
+  .dec-stop li::before{content:"✕";position:absolute;left:0;color:var(--rojo);font-size:11px;top:5px}
+  @media(max-width:640px){
+    .dec-table,.dec-table tbody,.dec-table tr,.dec-table td{display:block;width:auto}
+    .dec-table tr:first-child{display:none}
+    .dec-table tr{border:1px solid var(--linea);border-radius:8px;margin-bottom:12px;overflow:hidden}
+    .dec-table td{border:none;border-top:1px dashed var(--linea);width:auto!important}
+    .dec-table td:first-child{background:var(--papel-2);border-top:none}
+    .dec-table td[data-l]::before{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;margin-bottom:4px;color:#8a8974;content:attr(data-l)}
+  }
   .err-table{width:100%;border-collapse:collapse;font-size:14px}
   .err-table td,.err-table th{border-top:1px dashed var(--linea);padding:10px 6px;text-align:left;vertical-align:top}
   .err-table th{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;color:#6b6a5c;border-top:none}
@@ -196,6 +216,21 @@
   .mon-legend{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:#6b6a5c}
   .mon-legend span{display:flex;align-items:center;gap:6px}
   .mon-legend i{width:18px;height:0;border-top-width:2.5px;border-top-style:solid;display:inline-block}
+  .mon-sub{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--ambar);margin:26px 0 10px}
+  .mon-seq{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:6px}
+  .seq-step{background:#fff;border:1px solid var(--linea);border-radius:10px;border-top:3px solid var(--verde);padding:16px 18px}
+  .seq-step .seq-n{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:#8a8974;margin-bottom:6px}
+  .seq-step h4{font-size:15.5px;color:var(--verde);margin-bottom:6px;line-height:1.3}
+  .seq-step p{font-size:14px;color:#54544a;margin-bottom:8px}
+  .seq-step p:last-child{margin-bottom:0}
+  .seq-step code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--papel-2);padding:1px 5px;border-radius:4px;color:var(--tinta)}
+  .sg{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 7px;border-radius:11px;display:inline-block;margin-bottom:5px;font-weight:600}
+  .sg.up{background:#fdf6e8;color:#a06a10}
+  .sg.down{background:#eef4f9;color:var(--azul)}
+  .sg.eq,.sg.zero{background:var(--papel-2);color:#6b6a5c}
+  .mon-table td.s1,.mon-table td.s2{color:#3f5560;width:34%}
+  .mon-table td.s1 b,.mon-table td.s2 b{color:var(--verde-claro)}
+  .mon-table td.s2{background:#fbfaf5}
   #monBody .diagram-row{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
   #monBody .diagram-box{min-width:0}
   #monBody .diagram-row>.diagram-box:nth-child(3){grid-column:1/-1}
@@ -210,6 +245,10 @@
     .mon-table td.ok::before,.mon-table td.bad::before{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;margin-bottom:4px}
     .mon-table td.ok::before{content:"NORMAL";color:var(--verde-claro)}
     .mon-table td.bad::before{content:"ALARMA";color:var(--rojo)}
+    .mon-table td.s1::before,.mon-table td.s2::before{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;margin-bottom:4px;color:#8a8974}
+    .mon-table td.s1::before{content:"PASO 1 · VÁLVULA CERRADA"}
+    .mon-table td.s2::before{content:"PASO 2 · DISIPACIÓN"}
+    .mon-seq{grid-template-columns:1fr}
   }
 
   .astm{margin:18px 20px 0;border:1px solid #cdd6dc;border-left:4px solid var(--agua);border-radius:0 8px 8px 0;background:#f4f8fa;padding:14px 18px}
@@ -546,7 +585,7 @@ const MUESTRAS_DEFAULT = [
 const AppState = {
   tipo:'CU',
   checked:[],
-  plan:{bpInicial:10, incremento:50, gapMax:10, bpObjetivo:300, intervaloB:3},
+  plan:{bpInicial:10, incremento:50, gapMax:10, bpObjetivo:300, intervaloB:3, rampa:30},
   muestras:{
     m1:{sigma:50, cpUU:100},
     m2:{sigma:150, cpUU:200},
@@ -1074,6 +1113,15 @@ function ptable(rows){
     ${rows.map(r=>`<tr><td>${r[0]}</td><td class="ok">${r[1]}</td><td class="bad">${r[2]}</td></tr>`).join('')}
   </table>`;
 }
+/* Tabla de señales: qué hace cada sensor en cada paso. r = [señal, [tag,txt] paso1, [tag,txt] paso2] */
+const SG={up:'↑ sube',down:'↓ baja',eq:'→ constante',zero:'≈ 0'};
+function stable(h1,h2,rows){
+  const cel=(c,v)=>`<td class="${c}"><span class="sg ${v[0]}">${SG[v[0]]}</span><br>${v[1]}</td>`;
+  return `<table class="mon-table">
+    <tr><th>Señal</th><th>${h1}</th><th>${h2}</th></tr>
+    ${rows.map(r=>`<tr><td>${r[0]}</td>${cel('s1',r[1])}${cel('s2',r[2])}</tr>`).join('')}
+  </table>`;
+}
 
 const MONITOR = {
   saturacion:{
@@ -1119,6 +1167,32 @@ const MONITOR = {
   consolidacion:{
     t:'Consolidación — disipación de poros y expulsión de agua',
     d:'Las dos trazas centrales son <b>imagen espejo</b>: el exceso de presión de poros cae mientras el agua sale. Que ambas se estabilicen <b>al mismo tiempo</b> es la mejor verificación de que no hay fuga.',
+    seq:`
+      <div class="mon-sub">Arranque de la etapa · quién sube, quién baja y quién se mantiene</div>
+      <div class="mon-seq">
+        <div class="seq-step">
+          <div class="seq-n">PASO 1</div>
+          <h4>Subir la presión de cámara con la válvula de drenaje <b>cerrada</b></h4>
+          <p>Con <code>BP = 300 kPa</code> y un objetivo de <code>σ′₃ = 100 kPa</code>, se sube CP de 300 a <code>400 kPa</code>. Como la muestra está saturada, el agua no puede salir y <b>toma toda la carga</b>: la presión de poros salta con ella y el esfuerzo efectivo sigue en cero. Todavía no consolida nada.</p>
+          <p>Ese salto es el <b>chequeo de B</b>: B = Δu/Δσ₃ = 100/100 = <b>1,0</b>. Si u solo llegara a 380, B = 0,80 → falta saturación, hay que volver atrás.</p>
+        </div>
+        <div class="seq-step">
+          <div class="seq-n">PASO 2</div>
+          <h4>Abrir la válvula: ahí empieza la consolidación real</h4>
+          <p>La muestra queda conectada a la contrapresión y el exceso se disipa <b>expulsando agua</b>. u cae de 400 hacia 300, rápido al principio y cada vez más lento, mientras σ′₃ sube de 0 a 100 kPa y el medidor de volumen registra el agua que sale.</p>
+          <p><b>Criterio de fin:</b> 95 % de disipación, es decir u − BP ≤ 5 % del Δu inicial → parar cuando <code>u ≤ 305 kPa</code>. De esa curva salen t₅₀ / t₁₀₀ para fijar la velocidad de corte.</p>
+        </div>
+      </div>
+      ${stable('Paso 1 · válvula cerrada','Paso 2 · disipación',[
+        ['Presión de celda · CP',['up','Escalón de 300 → 400 kPa. Es la que tú <b>impones</b>.'],['eq','Fija en 400 kPa: el controlador la sostiene como condición de frontera.']],
+        ['Contrapresión · BP',['eq','Fija en 300 kPa; el controlador está <b>aislado</b> por la válvula cerrada.'],['eq','Fija en 300 kPa: es el <b>nivel hacia el cual drena</b> el agua.']],
+        ['Presión de poros · u',['up','Salta casi lo mismo que ΔCP: 300 → ~400 kPa, de forma <b>instantánea</b>.'],['down','<b>Decae</b> asintóticamente 400 → 300 kPa hasta igualar BP.']],
+        ['Efectivo · σ′₃ = CP − u',['zero','Sigue en ~0: el agua absorbió todo el incremento.'],['up','<b>Sube de 0 a 100 kPa</b>. Esto —y no la presión total— es lo que consolida.']],
+        ['Cambio de volumen · ΔV',['zero','Nulo: el agua no tiene por dónde salir.'],['up','Agua saliendo, con forma de √t, hasta <b>aplanarse</b> en t₁₀₀.']]
+      ])}
+      <div class="tip">💡 <b>La clave conceptual:</b> CP y BP son las que tú impones y por eso <b>se mantienen constantes</b>; u es la única que <b>responde</b>, y siempre viaja desde CP hacia BP. Lo que consolida la muestra no es que baje la presión total, sino que <b>al bajar u sube σ′ = CP − u</b>.</div>
+      <div class="tip">💡 <b>Por qué la caída se ve con retraso:</b> el transductor de poros va en la <b>base</b> y el drenaje se hace por el <b>cabezal</b> (o por drenes laterales). Se mide a propósito en el punto <b>más lejano</b> al drenaje: si se midiera donde drena, u caería de golpe a BP y la curva no serviría para leer t₅₀ / t₁₀₀.</div>
+      <div class="mon-sub">Trazas típicas de la etapa</div>`,
     charts:[
       mchart('','tiempo →',
         `<path d="M50,40 C95,58 130,98 172,128 C210,150 250,159 292,161" fill="none" stroke="${C_PWP}" stroke-width="2.4"/>
@@ -1148,7 +1222,9 @@ const MONITOR = {
         '⚠ El diagnóstico más útil: si PWP ya se estabilizó pero <b>ΔV sigue creciendo</b>, el agua no viene de la muestra sino de una fuga')
     ],
     params:[
+      ['Salto inicial de u','Al subir CP con la válvula cerrada, u sube <b>prácticamente lo mismo</b> que ΔCP (B ≈ 1).','Sube bastante menos (80 de 100 kPa → B = 0,80): <b>falta saturación</b>, hay aire ocluido. Volver a contrapresión.'],
       ['PWP','<b>Decae</b> desde el exceso inicial hasta igualar BP, siguiendo la curva de Taylor.','No decae: drenaje <b>obstruido</b> (piedra o filtro taponado) o tiempo insuficiente.'],
+      ['u respecto a BP','Se acerca a BP <b>por arriba</b> y se detiene en ese valor.','Cae <b>por debajo</b> de BP: fuga, o el controlador de contrapresión perdió presión.'],
       ['ΔV','Agua <b>saliendo</b>, con la misma forma temporal que la disipación, y <b>plateau</b> en t₁₀₀.','Sigue creciendo <b>después</b> de que PWP ya se estabilizó: fuga en membrana o conexiones.'],
       ['ΔV vs PWP','Ambos se estabilizan <b>al mismo tiempo</b>: son la misma física vista de dos formas.','Desfase entre ambos: fuga, o un transductor bloqueado que da una lectura falsamente plana.'],
       ['CP y BP','<b>Constantes</b> en los valores objetivo de la muestra durante toda la etapa.','Deriva de cualquiera de las dos: falla del controlador o pérdida en el circuito.'],
@@ -1337,8 +1413,10 @@ function renderMonitor(){
   document.querySelectorAll('.mon-pill').forEach(b=>b.classList.toggle('active', b.dataset.m===monStage));
   document.getElementById('monBody').innerHTML=`
     <div class="mon-head"><h3>${m.t}</h3><p>${m.d}</p></div>
+    ${m.seq||''}
     <div class="diagram-row">${m.charts.join('')}</div>
     ${leg([[C_CP,'traza normal / esperada'],[C_BP,'variante del mismo ensayo'],[C_BAD,'señal de alarma',true]])}
+    <div class="mon-sub">Parámetros a vigilar</div>
     ${ptable(m.params)}`;
 }
 document.querySelectorAll('.mon-pill').forEach(b=>b.addEventListener('click',()=>{
@@ -1538,25 +1616,83 @@ function computeRampSteps(){
   return steps;
 }
 
-function rampStepsToTable(steps, gap){
+/* Tiempo que tarda el controlador en aplicar un Δ de presión a la velocidad de rampa configurada */
+function fmtRampa(kpa, rate){
+  if(!(rate>0)||!(kpa>0)) return '—';
+  const s=Math.round(kpa/rate*60);
+  const m=Math.floor(s/60), r=s%60;
+  return m ? (r ? `${m} min ${r} s` : `${m} min`) : `${r} s`;
+}
+function rampStepsToTable(steps, gap, inc, rate){
   const rows=steps.map((s,i)=>{
     const chk=`<td><input type="checkbox" class="rowCheck" id="chk${i}"></td>`;
     if(s.bcheck){
-      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>Subir CP un Δ conocido (+50 kPa); confirmar B = ΔPWP/ΔCP ≥ 0,95</td>${chk}</tr>`;
+      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>${fmtRampa(50,rate)}</td><td>Subir CP un Δ conocido (+50 kPa); confirmar B = ΔPWP/ΔCP ≥ 0,95</td>${chk}</tr>`;
     }
     if(s.bmid){
-      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>Punto de control: Δ+30 kPa, drenaje cerrado. B parcial debe ir <b>creciendo</b> hacia ≥0,95; si se estanca, hay que revisar antes de seguir</td>${chk}</tr>`;
+      return `<tr class="bcheck-row"><td>${s.n}</td><td>${s.cp}</td><td>drenaje cerrado</td><td>—</td><td>${fmtRampa(30,rate)}</td><td>Punto de control: Δ+30 kPa, drenaje cerrado. B parcial debe ir <b>creciendo</b> hacia ≥0,95; si se estanca, hay que revisar antes de seguir</td>${chk}</tr>`;
     }
     const g=s.cp-s.bp;
     const cls=g<=gap?'gap-ok':'gap-warn';
-    return `<tr><td>${s.n}</td><td>${s.cp}</td><td>${s.bp}</td><td class="${cls}">${g}</td><td>${s.n==='Asiento'?'Primer contacto tras succión y cierre de cámara':'Subir CP, luego BP hasta igualar la brecha; verificar que PWP se estabilizó antes de avanzar'}</td>${chk}</tr>`;
+    const t=s.n==='Asiento' ? '—' : fmtRampa(2*inc,rate);
+    return `<tr><td>${s.n}</td><td>${s.cp}</td><td>${s.bp}</td><td class="${cls}">${g}</td><td>${t}</td><td>${s.n==='Asiento'?'Primer contacto tras succión y cierre de cámara':'Subir CP, luego BP hasta igualar la brecha; verificar que PWP se estabilizó antes de avanzar'}</td>${chk}</tr>`;
   }).join('');
-  return `<table class="plan-table"><tr><th>Escalón</th><th>CP (kPa)</th><th>BP (kPa)</th><th>CP−BP</th><th>Acción</th><th>✓</th></tr>${rows}</table>`;
+  return `<table class="plan-table"><tr><th>Escalón</th><th>CP (kPa)</th><th>BP (kPa)</th><th>CP−BP</th><th>Rampa @ ${rate||'—'} kPa/min</th><th>Acción</th><th>✓</th></tr>${rows}</table>`;
+}
+
+/* Criterios para decidir el cambio de escalón durante la saturación */
+const DEC_ESCALON=[
+  ['PWP alcanzó BP','Con el drenaje abierto, u sube hasta igualar la contrapresión aplicada y <b>deja de moverse</b>. Es el criterio principal.','u − BP ≤ 2 kPa, estable en 2 lecturas separadas 5 min'],
+  ['ΔV se aplanó','El agua que <b>entra</b> en el escalón se frena hasta casi cero: los vacíos de ese nivel de presión ya se llenaron.','&lt; 0,1 cm³ en 10 min, o &lt; 5 % de lo que entró en el escalón anterior'],
+  ['Brecha CP − BP','Volvió al valor objetivo después de igualar BP. Si quedó abierta, el efectivo no es el que crees.','= brecha configurada (± 2 kPa)'],
+  ['Tiempo mínimo','No cambiar apenas termina la rampa: la presión todavía no llegó al <b>centro</b> de la muestra.','≥ 10 min, y ≥ 3 × el tiempo de rampa de la tabla'],
+  ['B en los controles','En cada escalón de control B debe venir <b>creciendo</b> respecto al anterior.','Creciente hacia ≥ 0,95']
+];
+const DEC_TIEMPOS=[
+  ['Arena limpia / grava','10 – 15 min','1 – 2 h'],
+  ['Arena limosa / limo','30 – 60 min','3 – 6 h'],
+  ['Arcilla CL (baja-media plasticidad)','1 – 3 h','8 – 18 h · último escalón toda la noche'],
+  ['Arcilla CH (alta plasticidad)','4 – 12 h','2 – 4 días · a veces un escalón por día']
+];
+function decisionEscalonHtml(){
+  const filas=DEC_ESCALON.map(r=>`<tr><td>${r[0]}</td><td data-l="QUÉ DEBE PASAR">${r[1]}</td><td data-l="REFERENCIA">${r[2]}</td></tr>`).join('');
+  const tiempos=DEC_TIEMPOS.map(r=>`<tr><td>${r[0]}</td><td data-l="POR ESCALÓN">${r[1]}</td><td data-l="TOTAL ESTIMADO">${r[2]}</td></tr>`).join('');
+  return `
+    <div style="margin:22px 20px 0">
+      <div class="mon-sub" style="margin-top:0">Decisión de cambio de escalón · los 5 criterios</div>
+      <table class="dec-table">
+        <tr><th>Criterio</th><th>Qué debe pasar</th><th>Referencia práctica</th></tr>
+        ${filas}
+      </table>
+    </div>
+    <div class="dec-stop">
+      <h5>No cambies de escalón todavía si…</h5>
+      <ul>
+        <li>u sigue subiendo o bajando, aunque sea lentamente</li>
+        <li>el medidor de volumen sigue moviéndose de forma sostenida</li>
+        <li>la brecha CP − BP quedó abierta más de lo configurado</li>
+        <li>acabas de terminar la rampa (la presión aún no llegó al centro)</li>
+        <li>en el último control B no creció respecto al anterior</li>
+      </ul>
+    </div>
+    <div style="margin:22px 20px 0">
+      <div class="mon-sub" style="margin-top:0">Cuánto tarda en la práctica, según el suelo</div>
+      <table class="dec-table">
+        <tr><th>Suelo</th><th>Sostenimiento por escalón</th><th>Total estimado de la saturación</th></tr>
+        ${tiempos}
+      </table>
+    </div>
+    <div class="tip" style="margin:14px 20px 0">
+      💡 <b>Son dos relojes distintos.</b> El <b>rápido</b> es la equalización de presión hasta el centro de la muestra: lo gobierna la permeabilidad (minutos en arena, horas en arcilla). El <b>lento</b> es la disolución del aire ocluido en el agua, y ese <b>no se acelera esperando más</b> en un escalón: se acelera <b>subiendo la presión</b>. Por eso conviene escalones cortos que lleguen rápido a un BP alto, y ahí sí dar tiempo.
+    </div>
+    <div class="tip" style="margin:14px 20px 18px;border-color:var(--rojo);background:#fdf3f0;color:#7d3324">
+      ⚠ <b>Si B se estanca, el problema no es el tiempo.</b> Esperar más horas no mueve un B planchado en 0,85. O falta <b>BP objetivo</b> (súbelo), o quedó <b>aire libre</b> que la percolación no barrió (hay que volver atrás). Alargar escalones solo sirve cuando B <b>viene creciendo</b> pero poco.
+    </div>`;
 }
 
 function rampConfigHtml(){
   const steps=computeRampSteps();
-  const table = steps ? rampStepsToTable(steps, AppState.plan.gapMax) : '<div class="tip" style="border-color:var(--rojo)">⚠ El incremento por escalón debe ser mayor que 0 kPa para poder generar la ruta.</div>';
+  const table = steps ? rampStepsToTable(steps, AppState.plan.gapMax, AppState.plan.incremento, AppState.plan.rampa) : '<div class="tip" style="border-color:var(--rojo)">⚠ El incremento por escalón debe ser mayor que 0 kPa para poder generar la ruta.</div>';
   return `
     <div class="ramp-config" style="margin:18px 20px 0">
       <div><label>BP inicial (kPa)</label><input type="number" id="bpInicial" value="${AppState.plan.bpInicial}"></div>
@@ -1564,12 +1700,17 @@ function rampConfigHtml(){
       <div><label>Brecha máx. CP−BP (kPa)</label><input type="number" id="gapMax" value="${AppState.plan.gapMax}"></div>
       <div><label>BP objetivo (kPa)</label><input type="number" id="bpObjetivo" value="${AppState.plan.bpObjetivo}"></div>
       <div><label>B-check intermedio cada N escalones</label><input type="number" id="intervaloB" value="${AppState.plan.intervaloB}"></div>
+      <div><label>Velocidad de rampa (kPa/min)</label><input type="number" id="rampaVel" value="${AppState.plan.rampa}"></div>
       <button class="btn sm" id="genRampa">↻ Generar escalones</button>
     </div>
     <div id="rampaResultado" style="margin:12px 20px 0">${table}</div>
     <div class="tip" style="margin:14px 20px 0">
+      <b>⚠ La columna «Rampa» NO es el tiempo del escalón.</b> La velocidad que recomienda el equipo (típicamente <b>30 kPa/min</b>) es solo el ritmo con que el controlador <b>aplica</b> el cambio de presión, para no golpear la muestra. Terminada la rampa empieza el <b>tiempo de sostenimiento</b>, que no se decide con el reloj sino con los criterios de abajo.
+    </div>
+    <div class="tip" style="margin:14px 20px 0">
       <b>Regla de oro:</b> nunca dejar que CP se adelante a BP más que la brecha máxima definida arriba. Sube CP un poco, iguala con BP, y solo entonces das el siguiente escalón. Si BP se adelanta a CP, el efectivo cae a casi cero o negativo y la muestra puede hincharse; si CP se adelanta demasiado, la comprimes transitoriamente.
-    </div>`;
+    </div>
+    ${decisionEscalonHtml()}`;
 }
 
 function generarRampa(){
@@ -1578,7 +1719,8 @@ function generarRampa(){
   const gap=+document.getElementById('gapMax').value||0;
   const bpObj=+document.getElementById('bpObjetivo').value||0;
   const intervaloB=+document.getElementById('intervaloB').value||0;
-  AppState.plan={bpInicial:bpI, incremento:inc, gapMax:gap, bpObjetivo:bpObj, intervaloB};
+  const rampa=+document.getElementById('rampaVel').value||0;
+  AppState.plan={bpInicial:bpI, incremento:inc, gapMax:gap, bpObjetivo:bpObj, intervaloB, rampa};
   renderChecklist();
   saveState();
 }
