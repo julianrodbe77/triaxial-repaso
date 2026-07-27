@@ -76,7 +76,8 @@
   .phase-head .chev{color:var(--ambar);font-size:20px;transition:.25s}
   .phase.open .chev{transform:rotate(90deg)}
   .phase-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
-  .phase.open .phase-body{max-height:1400px}
+  .phase.open .phase-body{max-height:6000px}
+  .phase-body.static{max-height:none!important;overflow:visible!important}
   .phase-body ul{list-style:none;padding:6px 20px 20px 20px}
   .phase-body li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px dashed var(--linea)}
   .phase-body li:first-child{border-top:none}
@@ -91,6 +92,10 @@
   .progress-wrap .lab{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:13px;color:#6b6a5c;margin-bottom:10px}
   .bar{height:8px;background:var(--papel-2);border-radius:4px;overflow:hidden}
   .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--verde),var(--ambar));transition:width .3s}
+
+  .muestra-select{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:14px 18px}
+  .muestra-select .ms-label{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:#8a8974}
+  .muestra-select select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:var(--papel);color:var(--tinta)}
 
   .info-grid{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:40px;align-items:start}
   @media(max-width:800px){.info-grid{grid-template-columns:1fr}}
@@ -143,7 +148,7 @@
   .plan-config select{width:auto;min-width:260px}
   .muestras-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:8px}
   @media(max-width:800px){.muestras-grid{grid-template-columns:1fr}}
-  .muestra-card{border:1px solid var(--linea);border-radius:10px;padding:18px;background:#fff;border-left:4px solid var(--ambar)}
+  .muestra-card{border:1px solid var(--linea);border-radius:10px;padding:18px;background:#fff;border-left:4px solid var(--ambar);transition:.2s}
   .muestra-card h5{color:var(--verde);margin-bottom:12px;font-size:16px}
   .muestra-card .row{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;margin-bottom:8px;font-family:"IBM Plex Mono",monospace;color:#54544a}
   .muestra-card .row b{color:var(--verde)}
@@ -206,7 +211,6 @@
     <button data-tab="mohr">◐ Círculo de Mohr</button>
     <button data-tab="cards">⇄ Flashcards</button>
     <button data-tab="fugas">⚠ Verificación de fugas</button>
-    <button data-tab="plan">🧪 Planeación de ensayo</button>
   </div>
 </nav>
 
@@ -215,7 +219,15 @@
     <div class="sec-head">
       <div class="kicker">Práctica paso a paso</div>
       <h2>Checklist de montaje y ejecución</h2>
-      <p>El ensayo tiene tres grandes etapas —saturación, consolidación y falla— precedidas por el montaje. Marca cada paso conforme lo realizas; la etiqueta indica a qué etapa pertenece cada fase.</p>
+      <p>Un solo flujo: elige el tipo de ensayo del lote y marca cada paso conforme lo realizas. La misma metodología aplica a las tres muestras en paralelo; los números propios de cada una (BP, σ'3, CP) aparecen en la tabla dentro de la fase correspondiente.</p>
+    </div>
+    <div class="muestra-select" id="muestraSelect">
+      <span class="ms-label">Tipo de ensayo del lote</span>
+      <select id="planTipo">
+        <option value="UU">UU — no consolidado, no drenado</option>
+        <option value="CU" selected>CU — consolidado, no drenado</option>
+        <option value="CD">CD — consolidado, drenado</option>
+      </select>
     </div>
     <div class="progress-wrap">
       <div class="lab"><span>Progreso del ensayo</span><span id="pct">0 / 0</span></div>
@@ -410,190 +422,227 @@
   </div>
 </section>
 
-<section class="panel" id="plan">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="kicker">Diseño de la campaña · 3 cámaras independientes</div>
-      <h2>Planeación de ensayo — 3 muestras en paralelo</h2>
-      <p>Cada cámara tiene su propia unidad de presión/contrapresión, así que saturación, consolidación y corte corren en paralelo sin cuello de botella. Elige el tipo de ensayo del lote y genera la ruta de escalones respetando la brecha máxima CP−BP.</p>
-    </div>
-
-    <div class="plan-config">
-      <div>
-        <label>Tipo de ensayo del lote</label>
-        <select id="planTipo">
-          <option value="UU">UU — no consolidado, no drenado</option>
-          <option value="CU" selected>CU — consolidado, no drenado</option>
-          <option value="CD">CD — consolidado, drenado</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="planUUNote" class="tip" style="display:none">
-      <b>UU no lleva saturación ni consolidación con BP controlada.</b> Se monta la muestra y se aplica directamente una presión de cámara total (sin distinguir efectivo) por muestra, y se corta sin abrir drenaje. Las tres muestras se ensayan a tres presiones de cámara total distintas para trazar la envolvente total (φᵤ ≈ 0 en suelos saturados).
-    </div>
-
-    <div id="planSatBlock">
-      <div class="sec-head" style="margin-bottom:16px">
-        <div class="kicker">Etapa 1</div>
-        <h2 style="font-size:22px">Ruta de saturación</h2>
-      </div>
-      <div class="ramp-config">
-        <div><label>BP inicial (kPa)</label><input type="number" id="bpInicial" value="10"></div>
-        <div><label>Incremento por escalón (kPa)</label><input type="number" id="incremento" value="50"></div>
-        <div><label>Brecha máx. CP−BP (kPa)</label><input type="number" id="gapMax" value="10"></div>
-        <div><label>BP objetivo (kPa)</label><input type="number" id="bpObjetivo" value="300"></div>
-        <div><label>B-check intermedio cada N escalones</label><input type="number" id="intervaloB" value="3"></div>
-        <button class="btn sm" id="genRampa">↻ Generar escalones</button>
-      </div>
-      <div id="rampaResultado"></div>
-      <div class="tip" style="margin-top:14px">
-        <b>Regla de oro:</b> nunca dejar que CP se adelante a BP más que la brecha máxima definida arriba. Sube CP un poco, iguala con BP, y solo entonces das el siguiente escalón. Si BP se adelanta a CP, el efectivo cae a casi cero o negativo y la muestra puede hincharse; si CP se adelanta demasiado, la comprimes transitoriamente.
-      </div>
-
-      <div class="diagram-row">
-        <div class="diagram-box">
-          <svg viewBox="0 0 300 200">
-            <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
-            <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
-            <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">kPa</text>
-            <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">escalón →</text>
-            <polyline points="40,164 75,149 110,134 145,119 180,104 215,89 250,32" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
-            <polyline points="40,167 75,152 110,137 145,122 180,107 215,92" fill="none" stroke="var(--ambar)" stroke-width="2.5"/>
-            <polyline points="40,167 75,152 110,137 145,122 180,107 215,92 250,35" fill="none" stroke="var(--azul)" stroke-width="2" stroke-dasharray="5 3"/>
-            <line x1="250" y1="15" x2="250" y2="170" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="196" y="12" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B-check</text>
-            <circle cx="250" cy="32" r="3" fill="var(--verde)"/>
-            <circle cx="215" cy="92" r="3" fill="var(--ambar)"/>
-            <circle cx="250" cy="35" r="3" fill="var(--azul)"/>
-            <text x="252" y="35" font-size="9" fill="var(--verde)" font-family="IBM Plex Mono,monospace">CP</text>
-            <text x="252" y="95" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">BP</text>
-            <text x="204" y="52" font-size="9" fill="var(--azul)" font-family="IBM Plex Mono,monospace">PWP (B≈0,97)</text>
-          </svg>
-          <div class="diagram-cap">CP, BP y PWP: en escalones abiertos PWP sigue a BP; en el B-check (drenaje cerrado) PWP sube casi hasta CP si B es alto</div>
-        </div>
-        <div class="diagram-box">
-          <svg viewBox="0 0 300 200">
-            <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
-            <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
-            <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">B</text>
-            <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">check →</text>
-            <line x1="35" y1="28" x2="270" y2="28" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="200" y="24" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B objetivo = 0,95</text>
-            <polyline points="80,88 170,47 260,25" fill="none" stroke="var(--ambar)" stroke-width="2" stroke-dasharray="4 3"/>
-            <circle cx="80" cy="88" r="4" fill="var(--ambar)"/>
-            <circle cx="170" cy="47" r="4" fill="var(--ambar)"/>
-            <circle cx="260" cy="25" r="4" fill="var(--verde)"/>
-            <text x="62" y="105" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,55</text>
-            <text x="155" y="63" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,82</text>
-            <text x="245" y="14" font-size="8.5" fill="var(--verde)" font-family="IBM Plex Mono,monospace">0,97 ✓</text>
-          </svg>
-          <div class="diagram-cap">B esperado: tendencia creciente en cada check intermedio hasta superar 0,95</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sec-head" style="margin-top:40px">
-      <div class="kicker" id="consKicker">Etapa 2</div>
-      <h2 id="consTitle">Consolidación — σ'3 por muestra</h2>
-    </div>
-    <div class="muestras-grid" id="muestrasGrid"></div>
-
-    <div class="diagram-row">
-      <div class="diagram-box" style="flex:1 1 100%">
-        <svg viewBox="0 0 620 200">
-          <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1"/>
-          <line x1="45" y1="175" x2="45" y2="20" stroke="var(--linea)" stroke-width="1"/>
-          <text x="10" y="30" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
-          <text x="545" y="192" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">tiempo →</text>
-          <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
-          <text x="595" y="178" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">→0</text>
-          <path d="M70,40 C160,55 220,100 280,135 C340,160 420,172 560,175" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
-          <line x1="270" y1="25" x2="270" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
-          <text x="252" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t50</text>
-          <line x1="440" y1="25" x2="440" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
-          <text x="422" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t100</text>
-        </svg>
-        <div class="diagram-cap">Exceso de presión de poros (Δu) esperado: cae progresivamente hasta ≈0 al abrir el drenaje (curva de Taylor / t50-t100)</div>
-      </div>
-    </div>
-
-    <div class="tip" style="margin-top:16px;border-color:var(--rojo)">
-      <b>⚠ Cuidado con el signo del volumen:</b> en consolidación, la convención habitual es <b>volumen positivo = agua saliendo</b> (la muestra se comprime porque el esfuerzo efectivo sube). Si en cambio ves <b>agua entrando</b> (volumen negativo) durante un escalón de consolidación, no es normal aquí —a diferencia de la saturación, donde el agua entrando sí es lo esperado—. Casi siempre significa que el esfuerzo efectivo bajó en vez de subir: revisa si en ese escalón <b>BP se adelantó a CP</b> (violando la brecha máxima), lo que hincha la muestra en vez de comprimirla.
-    </div>
-
-    <div class="sec-head" style="margin-top:40px">
-      <div class="kicker">Etapa 3</div>
-      <h2 id="corteTitle">Corte — comportamiento esperado en sensores</h2>
-    </div>
-    <div id="corteInfo"></div>
-
-    <div class="phase" style="margin-top:12px">
-      <div class="phase-head"><div class="num">⚠</div><h3>Tabla de errores comunes por síntoma</h3><div class="chev">›</div></div>
-      <div class="phase-body" style="max-height:900px">
-        <table class="err-table">
-          <tr><th>Síntoma en sensores</th><th>Causa probable</th><th>Acción</th></tr>
-          <tr><td>B no sube de ~0,8 aunque subas BP mucho</td><td>Aire atrapado / muestra parcialmente desaturada</td><td>Subir CP y BP en pasos iguales, más lento, más presión total</td></tr>
-          <tr><td>CP−BP se aleja de la brecha objetivo entre pasos</td><td>Ritmo de escalones descuidado</td><td>Reducir el paso; igualar BP antes de subir CP de nuevo</td></tr>
-          <tr><td>PWP no decae en consolidación</td><td>Drenaje obstruido o tiempo insuficiente</td><td>Verificar piedra porosa/papel filtro; esperar curva de Taylor completa</td></tr>
-          <tr><td>PWP inestable o fuera de rango en el corte</td><td>Fuga en línea de medición u o-ring</td><td>Chequeo de estanqueidad (vacío/burbujador) antes de repetir</td></tr>
-          <tr><td>PWP "plano" en CD pero con variación fuerte de volumen</td><td>Transductor posiblemente bloqueado</td><td>Verificar línea de drenaje y sensor por separado</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
 <footer>
-  <div class="wrap">Material de repaso · Ensayo triaxial · Colombia, Boogotà<br>v.0· material de estudio compartido</div>
+  <div class="wrap">Material de repaso · Ensayo triaxial · Colombia, Bogotá<br>v.0· material de estudio compartido</div>
 </footer>
 
 <script>
-const CHECKLIST = [
-  {fase:"Montaje de la muestra", etapa:"Preparación", pasos:[
-    "Reconocer las partes de la cámara y las válvulas antes de empezar",
-    "Colocar la piedra porosa inferior sobre el pedestal",
-    "Poner papel filtro húmedo sobre la piedra porosa inferior",
-    "Colocar la muestra de suelo centrada sobre el filtro",
-    "Colocar papel filtro y piedra porosa superior sobre la muestra",
-    "Montar la membrana de látex con ligera succión para que se adhiera",
-    "Sellar con o-rings abajo (pedestal) y arriba (cabezal); normalmente dos en cada extremo",
-    "Colocar el cabezal superior de arriba hacia abajo"
-  ], tip:"Las <b>piedras porosas</b> permiten el drenaje y la medición de presión de poros por ambos extremos; el <b>papel filtro</b> evita que los finos las taponen. La <b>membrana</b> aísla la muestra del agua de confinamiento."},
-  {fase:"Cierre y llenado de la cámara", etapa:"Preparación", pasos:[
-    "Aplicar un pico de succión a la muestra para que se sostenga sin cámara",
-    "Montar el cilindro de la cámara y alinear el eje de carga axial",
-    "Apretar las tuercas / abrazaderas de la tapa",
-    "Inyectar agua (preferiblemente desaireada) abriendo la válvula de purga superior",
-    "Cerrar la purga cuando salga agua sin aire; la cámara queda llena",
-    "Aplicar una pequeña presión de cámara isotrópica (~40 kPa) para dejarla lista"
-  ], tip:"El agua entra por abajo y <b>desplaza el aire</b> hacia la válvula de purga superior. Usar <b>agua desaireada</b> evita burbujas y facilita la posterior saturación."},
-  {fase:"Saturación", etapa:"Etapa 1", pasos:[
-    "Aplicar presión por la parte inferior para empujar agua de abajo hacia arriba",
-    "Dejar purgar hasta expulsar el aire de la muestra",
-    "Cerrar la válvula de drenaje para medir el parámetro B de Skempton",
-    "Incrementar la presión de cámara un valor conocido (ej. 50 kPa) y leer el cambio de presión de poros",
-    "Confirmar B = Δu/Δσ₃ ≥ 0,95 (idealmente ≈1); si no, seguir saturando"
-  ], tip:"<b>B de Skempton</b> = Δu/Δσ₃. Si el suelo está saturado, el agua (incompresible) toma casi todo el incremento y B→1. Para acelerar: agua desaireada y subir presión externa e interna <b>simultáneamente</b> (no cambia el esfuerzo efectivo, disuelve el aire). Es la etapa más lenta: puede durar un día o más."},
-  {fase:"Consolidación", etapa:"Etapa 2", pasos:[
-    "Definir el esfuerzo efectivo de consolidación según la profundidad (ej. 100, 200, 400 kPa)",
-    "Aplicar presión de cámara externa (ej. 350 kPa) y contrapresión interna (ej. 50 kPa)",
-    "Abrir la válvula de drenaje y dejar disipar el exceso de presión de poros",
-    "Registrar el cambio de volumen vs. tiempo (curvas de Taylor, T₁₀₀)",
-    "Terminar cuando la presión de poros baje hasta igualar la contrapresión (~50 kPa)"
-  ], tip:"A diferencia del corte directo (unidimensional), aquí la consolidación es <b>isotrópica</b>. El <b>esfuerzo efectivo</b> = presión de cámara − contrapresión. Ejemplo real de la clase: 350 − 50 = <b>300 kPa</b> efectivos. La contrapresión evita que la muestra se desature."},
-  {fase:"Falla (corte)", etapa:"Etapa 3", pasos:[
-    "Llevar la cámara a la prensa triaxial y conectar la celda de carga",
-    "Elegir el tipo de ensayo: CD (drenado), CU (no drenado) o UU",
-    "Para CD: válvulas abiertas y velocidad lenta; para CU: válvulas cerradas, más rápido",
-    "Fijar la velocidad de ensayo en el computador (deformación controlada)",
-    "Aplicar carga axial creciente (σ₁ sube, σ₃ constante) y registrar fuerza, deformación y u",
-    "Identificar la falla: la carga llega a un pico y empieza a descender",
-    "Continuar hasta ~15–20 % de deformación para ver la curva completa",
-    "Desmontar, fotografiar y medir el plano y ángulo de falla a corte",
-    "Pesar húmeda y seca (horno): γ, γ_sat, relación de vacíos y grado de saturación inicial/final"
-  ], tip:"El <b>esfuerzo desviador</b> (σ₁ − σ₃) es el que cuenta en la falla. Criterio: la carga <b>llega a un pico y decae</b> (el suelo ya no resiste) o se alcanza ~15–20 % de deformación. Se necesitan <b>tres muestras</b> a distintos confinamientos para trazar la envolvente."}
+/* ---------- Estado compartido: checklist ⇄ planeación de ensayo ---------- */
+const STORAGE_KEY = 'triaxial_repaso_v1';
+
+const MUESTRAS_DEFAULT = [
+  {id:'m1', nombre:'Muestra 1', sigma:50, cpUU:100},
+  {id:'m2', nombre:'Muestra 2', sigma:150, cpUU:200},
+  {id:'m3', nombre:'Muestra 3', sigma:300, cpUU:300}
 ];
+
+const AppState = {
+  tipo:'CU',
+  checked:[],
+  plan:{bpInicial:10, incremento:50, gapMax:10, bpObjetivo:300, intervaloB:3},
+  muestras:{
+    m1:{sigma:50, cpUU:100},
+    m2:{sigma:150, cpUU:200},
+    m3:{sigma:300, cpUU:300}
+  }
+};
+
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState)); }catch(e){}
+}
+(function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    if(!saved || typeof saved!=='object') return;
+    if(saved.tipo) AppState.tipo=saved.tipo;
+    if(Array.isArray(saved.checked)) AppState.checked=saved.checked;
+    if(saved.plan) Object.assign(AppState.plan, saved.plan);
+    if(saved.muestras){
+      Object.keys(AppState.muestras).forEach(id=>{
+        if(saved.muestras[id]) Object.assign(AppState.muestras[id], saved.muestras[id]);
+      });
+    }
+  }catch(e){}
+})();
+
+/* ---------- Diagramas y contenido técnico embebido dentro de cada fase ---------- */
+const SAT_DIAGRAMS = `<div class="diagram-row" style="margin:18px 20px 0">
+  <div class="diagram-box">
+    <svg viewBox="0 0 300 200">
+      <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
+      <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
+      <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">kPa</text>
+      <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">escalón →</text>
+      <polyline points="40,164 75,149 110,134 145,119 180,104 215,89 250,32" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
+      <polyline points="40,167 75,152 110,137 145,122 180,107 215,92" fill="none" stroke="var(--ambar)" stroke-width="2.5"/>
+      <polyline points="40,167 75,152 110,137 145,122 180,107 215,92 250,35" fill="none" stroke="var(--azul)" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="250" y1="15" x2="250" y2="170" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="196" y="12" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B-check</text>
+      <circle cx="250" cy="32" r="3" fill="var(--verde)"/>
+      <circle cx="215" cy="92" r="3" fill="var(--ambar)"/>
+      <circle cx="250" cy="35" r="3" fill="var(--azul)"/>
+      <text x="252" y="35" font-size="9" fill="var(--verde)" font-family="IBM Plex Mono,monospace">CP</text>
+      <text x="252" y="95" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">BP</text>
+      <text x="204" y="52" font-size="9" fill="var(--azul)" font-family="IBM Plex Mono,monospace">PWP (B≈0,97)</text>
+    </svg>
+    <div class="diagram-cap">CP, BP y PWP: en escalones abiertos PWP sigue a BP; en el B-check (drenaje cerrado) PWP sube casi hasta CP si B es alto</div>
+  </div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 300 200">
+      <line x1="35" y1="170" x2="270" y2="170" stroke="var(--linea)" stroke-width="1"/>
+      <line x1="35" y1="170" x2="35" y2="15" stroke="var(--linea)" stroke-width="1"/>
+      <text x="8" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">B</text>
+      <text x="230" y="185" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">check →</text>
+      <line x1="35" y1="28" x2="270" y2="28" stroke="var(--rojo)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="200" y="24" font-size="9" fill="var(--rojo)" font-family="IBM Plex Mono,monospace">B objetivo = 0,95</text>
+      <polyline points="80,88 170,47 260,25" fill="none" stroke="var(--ambar)" stroke-width="2" stroke-dasharray="4 3"/>
+      <circle cx="80" cy="88" r="4" fill="var(--ambar)"/>
+      <circle cx="170" cy="47" r="4" fill="var(--ambar)"/>
+      <circle cx="260" cy="25" r="4" fill="var(--verde)"/>
+      <text x="62" y="105" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,55</text>
+      <text x="155" y="63" font-size="8.5" fill="#54544a" font-family="IBM Plex Mono,monospace">0,82</text>
+      <text x="245" y="14" font-size="8.5" fill="var(--verde)" font-family="IBM Plex Mono,monospace">0,97 ✓</text>
+    </svg>
+    <div class="diagram-cap">B esperado: tendencia creciente en cada check intermedio hasta superar 0,95</div>
+  </div>
+</div>`;
+
+const CONSOL_EXTRA = `<div class="diagram-row" style="margin:10px 20px 0">
+  <div class="diagram-box" style="flex:1 1 100%">
+    <svg viewBox="0 0 620 200">
+      <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1"/>
+      <line x1="45" y1="175" x2="45" y2="20" stroke="var(--linea)" stroke-width="1"/>
+      <text x="10" y="30" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
+      <text x="545" y="192" font-size="10" fill="#8a8974" font-family="IBM Plex Mono,monospace">tiempo →</text>
+      <line x1="45" y1="175" x2="590" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="595" y="178" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">→0</text>
+      <path d="M70,40 C160,55 220,100 280,135 C340,160 420,172 560,175" fill="none" stroke="var(--verde)" stroke-width="2.5"/>
+      <line x1="270" y1="25" x2="270" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="252" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t50</text>
+      <line x1="440" y1="25" x2="440" y2="175" stroke="var(--linea)" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="422" y="18" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">t100</text>
+    </svg>
+    <div class="diagram-cap">Exceso de presión de poros (Δu) esperado: cae progresivamente hasta ≈0 al abrir el drenaje (curva de Taylor / t50-t100)</div>
+  </div>
+</div>
+<div class="tip" style="margin:16px 20px 0;border-color:var(--rojo)">
+  <b>⚠ Cuidado con el signo del volumen:</b> la convención habitual es <b>volumen positivo = agua saliendo</b> (la muestra se comprime porque el esfuerzo efectivo sube). Si ves <b>agua entrando</b> (volumen negativo) durante un escalón de consolidación, no es normal aquí. Casi siempre significa que el esfuerzo efectivo bajó: revisa si en ese escalón <b>BP se adelantó a CP</b> (violando la brecha máxima).
+</div>`;
+
+const ERROR_TABLE_HTML = `<div style="margin:20px 20px 0">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--ambar);margin-bottom:8px">Tabla de errores comunes por síntoma</div>
+  <table class="err-table">
+    <tr><th>Síntoma en sensores</th><th>Causa probable</th><th>Acción</th></tr>
+    <tr><td>B no sube de ~0,8 aunque subas BP mucho</td><td>Aire atrapado / muestra parcialmente desaturada</td><td>Subir CP y BP en pasos iguales, más lento, más presión total</td></tr>
+    <tr><td>CP−BP se aleja de la brecha objetivo entre pasos</td><td>Ritmo de escalones descuidado</td><td>Reducir el paso; igualar BP antes de subir CP de nuevo</td></tr>
+    <tr><td>PWP no decae en consolidación</td><td>Drenaje obstruido o tiempo insuficiente</td><td>Verificar piedra porosa/papel filtro; esperar curva de Taylor completa</td></tr>
+    <tr><td>PWP inestable o fuera de rango en el corte</td><td>Fuga en línea de medición u o-ring</td><td>Chequeo de estanqueidad (vacío/burbujador) antes de repetir</td></tr>
+    <tr><td>PWP "plano" en CD pero con variación fuerte de volumen</td><td>Transductor posiblemente bloqueado</td><td>Verificar línea de drenaje y sensor por separado</td></tr>
+  </table>
+</div>`;
+
+const UU_NOTE_HTML = `<div class="tip" style="margin:16px 20px 0">
+  <b>UU no lleva saturación ni consolidación con BP controlada.</b> Se monta la muestra y se aplica directamente una presión de cámara total (sin distinguir efectivo) por muestra, y se corta sin abrir drenaje. Las tres muestras se ensayan a tres presiones de cámara total distintas para trazar la envolvente total (φᵤ ≈ 0 en suelos saturados).
+</div>`;
+
+function muestrasGridHtml(mode){
+  const bpObj=AppState.plan.bpObjetivo;
+  const cards=MUESTRAS_DEFAULT.map(def=>{
+    const m=AppState.muestras[def.id];
+    if(mode==='cpUU'){
+      return `<div class="muestra-card">
+        <h5>${def.nombre}</h5>
+        <label>Presión de cámara total (kPa)</label>
+        <input type="number" value="${m.cpUU}" data-id="${def.id}" class="cpUUInput">
+      </div>`;
+    }
+    return `<div class="muestra-card">
+      <h5>${def.nombre}</h5>
+      <label>σ'3 objetivo (kPa)</label>
+      <input type="number" value="${m.sigma}" data-id="${def.id}" class="sigmaInput">
+      <div class="row" style="margin-top:12px">BP objetivo <b>${bpObj} kPa</b></div>
+      <div class="row">CP en consolidación <b class="cpConsol">${bpObj+(+m.sigma||0)} kPa</b></div>
+    </div>`;
+  }).join('');
+  return `<div class="muestras-grid" style="margin:16px 20px 4px">${cards}</div>`;
+}
+
+/* ---------- Contenido técnico del checklist: la misma metodología aplica a las 3 muestras ---------- */
+function buildFases(tipo){
+  const esUU = tipo==='UU';
+  const fases=[];
+
+  fases.push({key:'montaje', fase:'Montaje de la muestra', etapa:'Preparación', pasos:[
+    'Reconocer las partes de la cámara y las válvulas antes de empezar',
+    'Medir diámetro, altura y masa húmeda inicial de la muestra <b>antes de la membrana</b> — es el único momento en que se puede tomar este dato',
+    'Revisar la membrana al trasluz en busca de pinchazos antes de instalarla',
+    'Colocar la piedra porosa inferior sobre el pedestal',
+    'Poner papel filtro húmedo sobre la piedra porosa inferior',
+    'Colocar tiras verticales de papel filtro (side drains) si se requiere acelerar el drenaje radial (opcional, según velocidad de corte planeada)',
+    'Colocar la muestra de suelo centrada sobre el filtro, verificando que quede vertical respecto al eje de carga',
+    'Colocar papel filtro y piedra porosa superior sobre la muestra',
+    'Montar la membrana de látex con ligera succión para que se adhiera',
+    'Sellar con o-rings abajo (pedestal) y arriba (cabezal); normalmente dos en cada extremo',
+    'Colocar el cabezal superior de arriba hacia abajo'
+  ], tip:'Las <b>piedras porosas</b> permiten el drenaje y la medición de presión de poros por ambos extremos; el <b>papel filtro</b> evita que los finos las taponen. Las <b>tiras laterales</b> aportan drenaje radial extra, útil sobre todo en CD. La <b>membrana</b> aísla la muestra del agua de confinamiento.'});
+
+  fases.push({key:'cierre', fase:'Cierre y llenado de la cámara', etapa:'Preparación', pasos:[
+    'Aplicar un pico de succión a la muestra para que se sostenga sin cámara',
+    'Montar el cilindro de la cámara y alinear el eje de carga axial',
+    'Apretar las tuercas / abrazaderas de la tapa',
+    'Inyectar agua (preferiblemente desaireada) abriendo la válvula de purga superior',
+    'Cerrar la purga cuando salga agua sin aire; la cámara queda llena',
+    esUU
+      ? 'Aplicar la presión de cámara total definida para cada muestra (ver tabla abajo)'
+      : 'Aplicar una pequeña presión de cámara isotrópica (~40 kPa) para dejarla lista',
+    '<b>Confirmar que la presión de cámara ya supera al vacío antes de liberar la succión</b> — retirarlo antes puede perturbar o colapsar la muestra'
+  ], tip:'El agua entra por abajo y <b>desplaza el aire</b> hacia la válvula de purga superior. Usar <b>agua desaireada</b> evita burbujas. ⚠ El orden entre "aplicar presión de cámara" y "liberar el vacío" es el error de técnica más común en este paso.', extra:esUU?(UU_NOTE_HTML+muestrasGridHtml('cpUU')):''});
+
+  if(!esUU){
+    fases.push({key:'saturacion', fase:'Saturación', etapa:'Etapa 1', pasos:[
+      'Aplicar presión por la parte inferior para empujar agua de abajo hacia arriba',
+      'Dejar purgar hasta expulsar el aire de la muestra',
+      'Generar y seguir la ruta de escalones CP/BP configurada abajo, esperando que la presión de poros se estabilice antes de cada escalón',
+      'Cerrar la válvula de drenaje para medir el parámetro B de Skempton',
+      'Incrementar la presión de cámara un valor conocido (ej. 50 kPa) y leer el cambio de presión de poros',
+      'Confirmar B = Δu/Δσ₃ ≥ 0,95 al llegar al BP objetivo definido abajo; si no sube, revisar aire atrapado y continuar saturando'
+    ], tip:'<b>B de Skempton</b> = Δu/Δσ₃. Si el suelo está saturado, el agua (incompresible) toma casi todo el incremento y B→1. Para acelerar: agua desaireada y subir presión externa e interna <b>simultáneamente</b> (no cambia el esfuerzo efectivo, disuelve el aire). Es la etapa más lenta: puede durar un día o más.', extra:rampConfigHtml()+SAT_DIAGRAMS});
+
+    fases.push({key:'consolidacion', fase:'Consolidación', etapa:'Etapa 2', pasos:[
+      'Consolidar cada muestra hasta su propio esfuerzo efectivo objetivo σ\'3 (ver tabla abajo)',
+      'Abrir la válvula de drenaje y dejar disipar el exceso de presión de poros',
+      'Registrar el cambio de volumen vs. tiempo (curva de Taylor) y anotar t50 y t100 — se usan para fijar la velocidad del corte',
+      'Terminar cuando la presión de poros baje hasta igualar la contrapresión'
+    ], tip:'A diferencia del corte directo (unidimensional), aquí la consolidación es <b>isotrópica</b>. El <b>esfuerzo efectivo</b> = presión de cámara − contrapresión: cada muestra tiene su propio objetivo, mostrado en la tabla.', extra:muestrasGridHtml('sigma')+CONSOL_EXTRA});
+  }
+
+  const corteDrenaje = esUU
+    ? 'Mantener las válvulas de drenaje <b>cerradas</b> durante todo el corte; se trabaja en esfuerzos totales'
+    : (tipo==='CU'
+        ? 'Mantener las válvulas de drenaje <b>cerradas</b>; se mide la presión de poros para reconstruir esfuerzos efectivos'
+        : 'Mantener las válvulas de drenaje <b>abiertas</b> y usar una velocidad lenta que permita disipación continua');
+  const velocidad = esUU
+    ? 'Usar la velocidad estándar de ensayo no drenado del equipo (no depende de t50, al no haber consolidación medida)'
+    : 'Calcular la velocidad de deformación a partir de t50 (o t100) registrado en consolidación (criterio ASTM D4767/D7181) y fijarla en el computador';
+
+  fases.push({key:'falla', fase:'Falla (corte)', etapa:'Etapa 3', pasos:[
+    'Llevar la cámara a la prensa triaxial y conectar la celda de carga',
+    'Poner a cero la celda de carga, el LVDT y el transductor de presión de poros antes de iniciar',
+    corteDrenaje,
+    velocidad,
+    'Aplicar carga axial creciente (σ₁ sube, σ₃ constante) y registrar fuerza, deformación y u',
+    'Identificar la falla: la carga llega a un pico y empieza a descender',
+    'Continuar hasta ~15–20 % de deformación para ver la curva completa',
+    'Aplicar corrección de área por acortamiento/abultamiento de la muestra al calcular el esfuerzo desviador',
+    'Aplicar corrección por membrana (y por tiras de papel filtro, si se usaron) al esfuerzo medido',
+    'Desmontar, fotografiar y medir el plano y ángulo de falla a corte',
+    'Pesar húmeda y seca (horno): γ, γ_sat, relación de vacíos y grado de saturación inicial/final'
+  ], tip:'El <b>esfuerzo desviador</b> (σ₁ − σ₃) es el que cuenta en la falla. Se necesitan <b>tres muestras</b> a distintos confinamientos para trazar la envolvente de Mohr-Coulomb y leer c′ y φ′. Las correcciones de área y de membrana afectan directamente ese resultado.', extra:(CORTE_INFO[tipo]||'')+ERROR_TABLE_HTML});
+
+  return fases;
+}
 
 const PARTS = [
   {id:"p-pedestal",t:"Pedestal y base",d:"Base de la cámara con las salidas de agua y las válvulas que conectan con la parte inferior de la muestra y con el llenado de la cámara."},
@@ -648,25 +697,63 @@ tabBtns.forEach(b=>b.addEventListener('click',()=>{
   window.scrollTo({top:0,behavior:'smooth'});
 }));
 
-const clWrap=document.getElementById('checklist');
-let totalSteps=0;
-CHECKLIST.forEach((f,i)=>{
-  const phase=document.createElement('div');
-  phase.className='phase'+(i===0?' open':'');
-  let lis='';
-  f.pasos.forEach((p,j)=>{const id=`c${i}_${j}`;totalSteps++;lis+=`<li><input type="checkbox" id="${id}"><label for="${id}">${p}</label></li>`;});
-  phase.innerHTML=`<div class="phase-head"><div class="num">${i+1}</div><h3>${f.fase}</h3><span class="stage">${f.etapa}</span><div class="chev">›</div></div><div class="phase-body"><ul>${lis}</ul><div class="tip">💡 ${f.tip}</div></div>`;
-  clWrap.appendChild(phase);
-  phase.querySelector('.phase-head').addEventListener('click',()=>phase.classList.toggle('open'));
+function renderChecklist(){
+  const tipo=AppState.tipo;
+  const fases=buildFases(tipo);
+  const checkedSet=new Set(AppState.checked);
+  const clWrap=document.getElementById('checklist');
+  clWrap.innerHTML='';
+  let total=0, done=0;
+  fases.forEach((f,i)=>{
+    const phase=document.createElement('div');
+    phase.className='phase'+(i===0?' open':'');
+    let lis='';
+    f.pasos.forEach((p,j)=>{
+      const stepKey=`${f.key}_${j}`;
+      const isDone=checkedSet.has(stepKey);
+      total++; if(isDone) done++;
+      lis+=`<li class="${isDone?'done':''}"><input type="checkbox" id="${stepKey}" data-step="${stepKey}" ${isDone?'checked':''}><label for="${stepKey}">${p}</label></li>`;
+    });
+    phase.innerHTML=`<div class="phase-head"><div class="num">${i+1}</div><h3>${f.fase}</h3><span class="stage">${f.etapa}</span><div class="chev">›</div></div><div class="phase-body"><ul>${lis}</ul><div class="tip">💡 ${f.tip}</div>${f.extra||''}</div>`;
+    clWrap.appendChild(phase);
+    phase.querySelector('.phase-head').addEventListener('click',()=>phase.classList.toggle('open'));
+  });
+  document.getElementById('pct').textContent=`${done} / ${total}`;
+  document.getElementById('barfill').style.width=(total?done/total*100:0)+'%';
+}
+
+document.getElementById('checklist').addEventListener('change',e=>{
+  if(e.target.type!=='checkbox' || !e.target.dataset.step) return;
+  const stepKey=e.target.dataset.step;
+  const arr=AppState.checked;
+  const idx=arr.indexOf(stepKey);
+  if(e.target.checked){ if(idx===-1) arr.push(stepKey); }
+  else if(idx!==-1){ arr.splice(idx,1); }
+  e.target.closest('li').classList.toggle('done',e.target.checked);
+  const total=document.querySelectorAll('#checklist input[data-step]').length;
+  const done=document.querySelectorAll('#checklist input[data-step]:checked').length;
+  document.getElementById('pct').textContent=`${done} / ${total}`;
+  document.getElementById('barfill').style.width=(total?done/total*100:0)+'%';
+  saveState();
 });
-document.getElementById('pct').textContent=`0 / ${totalSteps}`;
-clWrap.addEventListener('change',e=>{
-  if(e.target.type==='checkbox'){
-    e.target.closest('li').classList.toggle('done',e.target.checked);
-    const done=clWrap.querySelectorAll('input:checked').length;
-    document.getElementById('pct').textContent=`${done} / ${totalSteps}`;
-    document.getElementById('barfill').style.width=(done/totalSteps*100)+'%';
+
+document.getElementById('checklist').addEventListener('input',e=>{
+  if(e.target.classList.contains('sigmaInput')){
+    const id=e.target.dataset.id;
+    const sigma=+e.target.value||0;
+    AppState.muestras[id].sigma=sigma;
+    const cpEl=e.target.closest('.muestra-card').querySelector('.cpConsol');
+    if(cpEl) cpEl.textContent=(AppState.plan.bpObjetivo+sigma)+' kPa';
+    saveState();
+  } else if(e.target.classList.contains('cpUUInput')){
+    const id=e.target.dataset.id;
+    AppState.muestras[id].cpUU=+e.target.value||0;
+    saveState();
   }
+});
+
+document.getElementById('checklist').addEventListener('click',e=>{
+  if(e.target.id==='genRampa') generarRampa();
 });
 
 const partsWrap=document.getElementById('parts');
@@ -730,13 +817,7 @@ document.addEventListener('keydown',e=>{
 renderCard();
 </script>
 <script>
-/* ---------- Módulo: Planeación de ensayo ---------- */
-const MUESTRAS = [
-  {id:'m1', nombre:'Muestra 1', sigma:50, cpUU:100},
-  {id:'m2', nombre:'Muestra 2', sigma:150, cpUU:200},
-  {id:'m3', nombre:'Muestra 3', sigma:300, cpUU:300}
-];
-
+/* ---------- Módulo: Planeación de ensayo (unificado con el checklist) ---------- */
 const CORTE_INFO = {
   UU:`<div class="corte-block">
     <p>Drenaje <b>cerrado todo el ensayo</b>; no se controla BP durante el corte. La presión de cámara total es el único confinamiento.</p>
@@ -840,12 +921,9 @@ const CORTE_INFO = {
   </div>`
 };
 
-function generarRampa(){
-  const bpI=+document.getElementById('bpInicial').value;
-  const inc=+document.getElementById('incremento').value;
-  const gap=+document.getElementById('gapMax').value;
-  const bpObj=+document.getElementById('bpObjetivo').value;
-  const intervaloB=+document.getElementById('intervaloB').value||0;
+function computeRampSteps(){
+  const {bpInicial:bpI, incremento:inc, gapMax:gap, bpObjetivo:bpObj, intervaloB} = AppState.plan;
+  if(!(inc>0)) return null;
   let bp=bpI, steps=[{n:'Asiento',cp:bp+gap,bp:bp}];
   let n=1, contador=0, midCount=0;
   while(bp<bpObj){
@@ -858,6 +936,10 @@ function generarRampa(){
     }
   }
   steps.push({n:'B-check final',cp:steps[steps.length-1].cp+50,bp:'cerrado',bcheck:true});
+  return steps;
+}
+
+function rampStepsToTable(steps, gap){
   const rows=steps.map((s,i)=>{
     const chk=`<td><input type="checkbox" class="rowCheck" id="chk${i}"></td>`;
     if(s.bcheck){
@@ -870,57 +952,47 @@ function generarRampa(){
     const cls=g<=gap?'gap-ok':'gap-warn';
     return `<tr><td>${s.n}</td><td>${s.cp}</td><td>${s.bp}</td><td class="${cls}">${g}</td><td>${s.n==='Asiento'?'Primer contacto tras succión y cierre de cámara':'Subir CP, luego BP hasta igualar la brecha; verificar que PWP se estabilizó antes de avanzar'}</td>${chk}</tr>`;
   }).join('');
-  document.getElementById('rampaResultado').innerHTML=
-    `<table class="plan-table"><tr><th>Escalón</th><th>CP (kPa)</th><th>BP (kPa)</th><th>CP−BP</th><th>Acción</th><th>✓</th></tr>${rows}</table>`;
-  actualizarMuestras();
+  return `<table class="plan-table"><tr><th>Escalón</th><th>CP (kPa)</th><th>BP (kPa)</th><th>CP−BP</th><th>Acción</th><th>✓</th></tr>${rows}</table>`;
 }
 
-function actualizarMuestras(){
-  const tipo=document.getElementById('planTipo').value;
-  const grid=document.getElementById('muestrasGrid');
-  const bpObj=+document.getElementById('bpObjetivo').value||300;
-  grid.innerHTML='';
-  MUESTRAS.forEach(m=>{
-    const card=document.createElement('div');
-    card.className='muestra-card';
-    if(tipo==='UU'){
-      card.innerHTML=`<h5>${m.nombre}</h5>
-        <label>Presión de cámara total (kPa)</label>
-        <input type="number" value="${m.cpUU}" data-id="${m.id}" class="cpUUInput">
-        <div class="row" style="margin-top:10px">Sin BP ni consolidación (UU)</div>`;
-    } else {
-      card.innerHTML=`<h5>${m.nombre}</h5>
-        <label>σ'3 objetivo (kPa)</label>
-        <input type="number" value="${m.sigma}" data-id="${m.id}" class="sigmaInput">
-        <div class="row" style="margin-top:12px">BP objetivo <b>${bpObj} kPa</b></div>
-        <div class="row">CP en consolidación <b class="cpConsol">${bpObj+m.sigma} kPa</b></div>`;
-    }
-    grid.appendChild(card);
-  });
-  grid.querySelectorAll('.sigmaInput').forEach(inp=>{
-    inp.addEventListener('input',e=>{
-      const sigma=+e.target.value||0;
-      e.target.closest('.muestra-card').querySelector('.cpConsol').textContent=(bpObj+sigma)+' kPa';
-    });
-  });
+function rampConfigHtml(){
+  const steps=computeRampSteps();
+  const table = steps ? rampStepsToTable(steps, AppState.plan.gapMax) : '<div class="tip" style="border-color:var(--rojo)">⚠ El incremento por escalón debe ser mayor que 0 kPa para poder generar la ruta.</div>';
+  return `
+    <div class="ramp-config" style="margin:18px 20px 0">
+      <div><label>BP inicial (kPa)</label><input type="number" id="bpInicial" value="${AppState.plan.bpInicial}"></div>
+      <div><label>Incremento por escalón (kPa)</label><input type="number" id="incremento" value="${AppState.plan.incremento}"></div>
+      <div><label>Brecha máx. CP−BP (kPa)</label><input type="number" id="gapMax" value="${AppState.plan.gapMax}"></div>
+      <div><label>BP objetivo (kPa)</label><input type="number" id="bpObjetivo" value="${AppState.plan.bpObjetivo}"></div>
+      <div><label>B-check intermedio cada N escalones</label><input type="number" id="intervaloB" value="${AppState.plan.intervaloB}"></div>
+      <button class="btn sm" id="genRampa">↻ Generar escalones</button>
+    </div>
+    <div id="rampaResultado" style="margin:12px 20px 0">${table}</div>
+    <div class="tip" style="margin:14px 20px 0">
+      <b>Regla de oro:</b> nunca dejar que CP se adelante a BP más que la brecha máxima definida arriba. Sube CP un poco, iguala con BP, y solo entonces das el siguiente escalón. Si BP se adelanta a CP, el efectivo cae a casi cero o negativo y la muestra puede hincharse; si CP se adelanta demasiado, la comprimes transitoriamente.
+    </div>`;
+}
+
+function generarRampa(){
+  const bpI=+document.getElementById('bpInicial').value||0;
+  const inc=+document.getElementById('incremento').value||0;
+  const gap=+document.getElementById('gapMax').value||0;
+  const bpObj=+document.getElementById('bpObjetivo').value||0;
+  const intervaloB=+document.getElementById('intervaloB').value||0;
+  AppState.plan={bpInicial:bpI, incremento:inc, gapMax:gap, bpObjetivo:bpObj, intervaloB};
+  renderChecklist();
+  saveState();
 }
 
 function actualizarTipoEnsayo(){
-  const tipo=document.getElementById('planTipo').value;
-  const esUU=tipo==='UU';
-  document.getElementById('planUUNote').style.display=esUU?'block':'none';
-  document.getElementById('planSatBlock').style.display=esUU?'none':'block';
-  document.getElementById('consKicker').textContent=esUU?'Cámara':'Etapa 2';
-  document.getElementById('consTitle').textContent=esUU?'Presiones de cámara por muestra':"Consolidación — σ'3 por muestra";
-  document.getElementById('corteTitle').textContent=`Corte — comportamiento esperado en sensores (${tipo})`;
-  document.getElementById('corteInfo').innerHTML=CORTE_INFO[tipo];
-  actualizarMuestras();
+  AppState.tipo=document.getElementById('planTipo').value;
+  renderChecklist();
+  saveState();
 }
 
+document.getElementById('planTipo').value=AppState.tipo;
 document.getElementById('planTipo').addEventListener('change',actualizarTipoEnsayo);
-document.getElementById('genRampa').addEventListener('click',generarRampa);
-actualizarTipoEnsayo();
-generarRampa();
+renderChecklist();
 </script>
 </body>
 </html>
