@@ -96,6 +96,9 @@
   .muestra-select{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:14px 18px}
   .muestra-select .ms-label{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:#8a8974}
   .muestra-select select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:var(--papel);color:var(--tinta)}
+  .ms-norma{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;color:#3f5560;display:flex;align-items:center;gap:8px}
+  .ms-norma b{background:var(--agua);color:#fff;padding:3px 9px;border-radius:4px;letter-spacing:.05em;font-weight:600}
+  @media(max-width:700px){.ms-norma{margin-left:0;width:100%}}
 
   .info-grid{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:40px;align-items:start}
   @media(max-width:800px){.info-grid{grid-template-columns:1fr}}
@@ -174,6 +177,35 @@
   .corte-block td,.corte-block th{border-top:1px dashed var(--linea);padding:8px 6px;text-align:left}
   .corte-block th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;color:#8a5a10;border-top:none}
 
+  .astm{margin:18px 20px 0;border:1px solid #cdd6dc;border-left:4px solid var(--agua);border-radius:0 8px 8px 0;background:#f4f8fa;padding:14px 18px}
+  .astm .astm-h{font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:#2f6a8c;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .astm .astm-h b{background:var(--agua);color:#fff;padding:2px 8px;border-radius:4px;letter-spacing:.06em}
+  .astm ul,.phase-body .astm ul{list-style:none;padding:0;margin:0}
+  .astm li,.phase-body .astm li{display:block;font-size:14px;line-height:1.55;color:#3f5560;padding:6px 0 6px 16px;border-top:1px dashed #cdd6dc;position:relative;gap:0}
+  .astm li:first-child{border-top:none}
+  .astm li::before{content:"▸";position:absolute;left:0;color:var(--agua)}
+  .astm li b{color:#1f4d66}
+  .astm .val{font-family:"IBM Plex Mono",monospace;font-size:13px;color:#1f4d66;font-weight:600}
+
+  .fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .fx{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;border-left:4px solid var(--ambar)}
+  .fx h4{font-size:16.5px;color:var(--verde);margin-bottom:4px}
+  .fx .etapa{font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#a06b12;margin-bottom:12px;display:block}
+  .eq{background:var(--papel-2);border-radius:8px;padding:16px 14px;text-align:center;font-size:20px;color:var(--tinta);margin-bottom:12px;overflow-x:auto;font-family:"Iowan Old Style",Palatino,Georgia,serif}
+  .eq i{font-style:italic}
+  .eq sub{font-size:.68em;vertical-align:-.25em}
+  .eq sup{font-size:.68em}
+  .eq .op{color:#8a8974;margin:0 .28em}
+  .fx .vars{list-style:none;font-size:14px;color:#54544a}
+  .fx .vars li{padding:5px 0;border-top:1px dashed var(--linea);display:flex;gap:10px}
+  .fx .vars li:first-child{border-top:none}
+  .fx .vars b{color:var(--verde);font-family:"IBM Plex Mono",monospace;font-size:13px;flex-shrink:0;min-width:52px}
+  .fx .nota{margin-top:12px;font-size:13.5px;color:#6a5320;background:#fdf6e8;border-radius:6px;padding:10px 12px}
+  .fx .nota b{color:var(--verde)}
+  .frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .2em}
+  .frac .num{border-bottom:1.5px solid var(--tinta);padding:0 .35em}
+  .frac .den{padding:0 .35em}
+
   .diagram-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
   .diagram-box{flex:1;min-width:260px;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:14px 16px}
   .diagram-box svg{width:100%;height:auto;display:block}
@@ -209,6 +241,7 @@
     <button class="active" data-tab="check">✓ Checklist del ensayo</button>
     <button data-tab="info">◈ Anatomía del montaje</button>
     <button data-tab="mohr">◐ Círculo de Mohr</button>
+    <button data-tab="formulas">∑ Fórmulas</button>
     <button data-tab="cards">⇄ Flashcards</button>
     <button data-tab="fugas">⚠ Verificación de fugas</button>
   </div>
@@ -228,6 +261,7 @@
         <option value="CU" selected>CU — consolidado, no drenado</option>
         <option value="CD">CD — consolidado, drenado</option>
       </select>
+      <span class="ms-norma" id="msNorma"></span>
     </div>
     <div class="progress-wrap">
       <div class="lab"><span>Progreso del ensayo</span><span id="pct">0 / 0</span></div>
@@ -341,6 +375,25 @@
         <button class="btn sm" id="mohrNext">Siguiente →</button>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="panel" id="formulas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Formulario de trabajo</div>
+      <h2>Las fórmulas del ensayo, etapa por etapa</h2>
+      <p>Las expresiones que realmente se usan durante el ensayo y en el procesamiento de datos, en el mismo orden de las etapas del checklist. Cada tarjeta indica qué significa cada símbolo y en qué momento se aplica.</p>
+    </div>
+    <div class="astm" style="margin:0 0 28px">
+      <div class="astm-h"><b>Nota</b> sobre el uso de estas expresiones y los valores de norma</div>
+      <ul>
+        <li>Este es <b>material de estudio</b>, no un sustituto de la norma. Los valores numéricos y criterios citados corresponden a los requisitos generales de ASTM D2850 (UU), D4767 (CU) y D7181 (CD), pero las normas <b>se revisan periódicamente</b>.</li>
+        <li>Antes de usarlos para un ensayo con validez formal, <b>verifica contra la edición vigente</b> de la norma y contra el procedimiento interno del laboratorio.</li>
+        <li>Algunos coeficientes (rigidez de membrana, del papel filtro) dependen del material específico y deben obtenerse por <b>calibración propia del equipo</b>, no de tablas genéricas.</li>
+      </ul>
+    </div>
+    <div class="fx-grid" id="fxGrid"></div>
   </div>
 </section>
 
@@ -543,6 +596,130 @@ const ERROR_TABLE_HTML = `<div style="margin:20px 20px 0">
   </table>
 </div>`;
 
+/* ---------- Requisitos de norma ASTM por etapa y tipo de ensayo ---------- */
+const NORMA_REF = {
+  UU:{cod:'ASTM D2850', nom:'Compresión triaxial no consolidada, no drenada (UU) en suelos cohesivos'},
+  CU:{cod:'ASTM D4767', nom:'Compresión triaxial consolidada, no drenada (CU) en suelos cohesivos'},
+  CD:{cod:'ASTM D7181', nom:'Compresión triaxial consolidada, drenada (CD) en suelos'}
+};
+
+const NORMA_REQ = {
+  montaje:{
+    UU:[
+      'Diámetro mínimo del espécimen: <span class="val">33 mm</span>; la partícula mayor debe ser menor a <span class="val">1/6 del diámetro</span>.',
+      'Relación altura/diámetro <span class="val">H/D entre 2,0 y 2,5</span> para evitar que el rozamiento de los cabezales distorsione el plano de falla.',
+      'Medir el diámetro promediando lecturas en <b>tercio superior, medio e inferior</b>, y la altura al menos en <b>tres posiciones</b>.',
+      'Las caras deben quedar planas y perpendiculares al eje; los extremos irregulares invalidan el área calculada.',
+      'Registrar masa húmeda y dimensiones <b>antes del montaje</b>: son la base de γ, e₀ y S₀.',
+      'Si tras el ensayo aparecen partículas mayores a la tolerancia, debe <b>reportarse como excepción</b> en el informe.'
+    ],
+    CU:[
+      'Diámetro mínimo del espécimen: <span class="val">33 mm</span>; la partícula mayor debe ser menor a <span class="val">1/6 del diámetro</span>.',
+      'Relación altura/diámetro <span class="val">H/D entre 2,0 y 2,5</span>.',
+      'Medir el diámetro promediando lecturas en <b>tercio superior, medio e inferior</b>, y la altura al menos en <b>tres posiciones</b>.',
+      'Las piedras porosas deben tener permeabilidad mayor que la del suelo y estar <b>saturadas y desaireadas</b> antes de montar.',
+      'Si se usan <b>tiras laterales de papel filtro</b>, deben cubrir a lo sumo el 50 % del perímetro y su rigidez debe descontarse luego (corrección obligatoria).',
+      'Registrar masa húmeda y dimensiones <b>antes del montaje</b>: son la base de γ, e₀ y S₀.'
+    ],
+    CD:[
+      'Diámetro mínimo del espécimen: <span class="val">33 mm</span>; la partícula mayor debe ser menor a <span class="val">1/6 del diámetro</span>.',
+      'Relación altura/diámetro <span class="val">H/D entre 2,0 y 2,5</span>.',
+      'Medir el diámetro promediando lecturas en <b>tercio superior, medio e inferior</b>, y la altura al menos en <b>tres posiciones</b>.',
+      'Las piedras porosas deben tener permeabilidad mayor que la del suelo y estar <b>saturadas y desaireadas</b> antes de montar.',
+      'En CD las <b>tiras laterales de papel filtro</b> son especialmente recomendables: acortan la trayectoria de drenaje y permiten una velocidad de corte menos lenta.',
+      'Registrar masa húmeda y dimensiones <b>antes del montaje</b>: son la base de γ, e₀ y S₀.'
+    ]
+  },
+  cierre:{
+    UU:[
+      'La membrana debe ser suficientemente delgada para no aportar resistencia apreciable; si el aporte supera <span class="val">5 %</span> del desviador, debe aplicarse corrección.',
+      'Verificar que la membrana no tenga perforaciones antes de sellar; usar <b>dos o-rings por extremo</b> para asegurar la estanqueidad.',
+      'El agua de cámara no debe entrar en contacto con la muestra: la membrana y los sellos son la única barrera.'
+    ],
+    CU:[
+      'La membrana debe ser suficientemente delgada para no aportar resistencia apreciable; si el aporte supera <span class="val">5 %</span> del desviador, debe aplicarse corrección.',
+      'Verificar que la membrana no tenga perforaciones antes de sellar; usar <b>dos o-rings por extremo</b>.',
+      'Purgar completamente el aire de las <b>líneas de drenaje y del transductor de poros</b>: una burbuja en la línea falsea la medición de u y arruina los esfuerzos efectivos.',
+      'Usar agua <b>desaireada</b> para el llenado; el aire disuelto retrasa la saturación por contrapresión.'
+    ],
+    CD:[
+      'La membrana debe ser suficientemente delgada para no aportar resistencia apreciable; si el aporte supera <span class="val">5 %</span> del desviador, debe aplicarse corrección.',
+      'Verificar que la membrana no tenga perforaciones antes de sellar; usar <b>dos o-rings por extremo</b>.',
+      'Purgar completamente el aire de las <b>líneas de drenaje y del medidor de cambio de volumen</b>: el aire atrapado se lee como cambio de volumen falso.',
+      'Usar agua <b>desaireada</b> para el llenado; el aire disuelto retrasa la saturación por contrapresión.'
+    ]
+  },
+  saturacion:{
+    CU:[
+      'Criterio de saturación: <span class="val">B ≥ 0,95</span>. Se acepta también un B menor si <b>no aumenta</b> al aplicar un incremento adicional de contrapresión (suelos muy rígidos o sobreconsolidados).',
+      'El B se mide con el <b>drenaje cerrado</b>, aplicando un incremento de presión de cámara y esperando a que la presión de poros se estabilice.',
+      'Los incrementos de contrapresión se aplican manteniendo un <b>diferencial CP−BP pequeño y constante</b> para no alterar el esfuerzo efectivo ni la fábrica del suelo.',
+      'La contrapresión requerida depende del grado de saturación inicial: suelos con más aire atrapado exigen presiones considerablemente mayores.',
+      'Registrar el <b>volumen de agua que entra</b> a la muestra durante esta etapa: se usa para corregir la relación de vacíos.'
+    ],
+    CD:[
+      'Criterio de saturación: <span class="val">B ≥ 0,95</span>. Se acepta también un B menor si <b>no aumenta</b> al aplicar un incremento adicional de contrapresión.',
+      'El B se mide con el <b>drenaje cerrado</b>, aplicando un incremento de presión de cámara y esperando a que la presión de poros se estabilice.',
+      'Los incrementos de contrapresión se aplican manteniendo un <b>diferencial CP−BP pequeño y constante</b> para no alterar el esfuerzo efectivo.',
+      'En CD una saturación deficiente es aún más crítica: si queda aire, el cambio de volumen medido no corresponde solo al agua expulsada.',
+      'Registrar el <b>volumen de agua que entra</b> a la muestra durante esta etapa.'
+    ]
+  },
+  consolidacion:{
+    CU:[
+      'Registrar cambio de volumen y presión de poros en intervalos crecientes de tiempo: <span class="val">0,1 · 0,2 · 0,5 · 1 · 2 · 4 · 8 · 15 · 30 min</span> y luego <span class="val">1 · 2 · 4 · 8 h</span>.',
+      'La consolidación se considera terminada cuando se ha disipado <b>al menos el 95 % del exceso de presión de poros</b>.',
+      'Determinar <b>t₅₀</b> con el método de la raíz del tiempo (Taylor) o del logaritmo del tiempo (Casagrande) sobre la curva registrada: es el insumo obligatorio para calcular la velocidad de corte.',
+      'El esfuerzo efectivo de consolidación debe alcanzarse en <b>incrementos controlados</b>, sin que la presión de cámara se adelante bruscamente a la contrapresión.',
+      'Los tres especímenes deben consolidarse a <b>esfuerzos efectivos distintos</b> que cubran el rango de esfuerzos esperado en campo.'
+    ],
+    CD:[
+      'Registrar cambio de volumen en intervalos crecientes de tiempo: <span class="val">0,1 · 0,2 · 0,5 · 1 · 2 · 4 · 8 · 15 · 30 min</span> y luego <span class="val">1 · 2 · 4 · 8 h</span>.',
+      'La consolidación se considera terminada cuando se ha disipado <b>al menos el 95 % del exceso de presión de poros</b>.',
+      'Determinar <b>t₅₀ y t₁₀₀</b> sobre la curva de consolidación: en CD la velocidad de corte se deriva del tiempo de consolidación primaria completo.',
+      'El esfuerzo efectivo de consolidación debe alcanzarse en <b>incrementos controlados</b>.',
+      'Los tres especímenes deben consolidarse a <b>esfuerzos efectivos distintos</b> que cubran el rango de esfuerzos esperado en campo.'
+    ]
+  },
+  falla:{
+    UU:[
+      'Velocidad de deformación axial: <span class="val">≈ 1 % por minuto</span>, de modo que la falla ocurra aproximadamente entre <span class="val">15 y 20 minutos</span>.',
+      'Criterio de falla: <b>máximo esfuerzo desviador</b> o <span class="val">15 % de deformación axial</span>, lo que ocurra primero.',
+      'Aplicar <b>corrección de área</b> por el ensanchamiento de la muestra al calcular el esfuerzo desviador.',
+      'Aplicar <b>corrección por membrana</b> si su aporte supera el 5 % del esfuerzo desviador.',
+      'Al no medirse presión de poros, los resultados son en <b>esfuerzos totales</b>: se reporta la resistencia no drenada s<sub>u</sub>, no c′ y φ′.',
+      'Registrar el contenido de humedad final tomando <b>toda la muestra ensayada</b>, y describir el modo de falla observado.'
+    ],
+    CU:[
+      'Velocidad de deformación calculada a partir de t₅₀: el tiempo hasta la falla debe ser del orden de <span class="val">10 · t₅₀</span> para que la presión de poros se equilibre dentro del espécimen.',
+      'Criterio de falla: <b>máximo esfuerzo desviador</b> o <span class="val">15 % de deformación axial</span>, lo que ocurra primero.',
+      'Registrar carga, deformación y <b>presión de poros</b> con suficiente densidad de puntos para definir bien el pico y la trayectoria de esfuerzos.',
+      'Aplicar <b>corrección de área</b>, <b>corrección por membrana</b> y <b>corrección por tiras de papel filtro</b> si se usaron.',
+      'Con las tiras de papel filtro se acorta la trayectoria de drenaje, lo que permite una velocidad de corte mayor que sin ellas.',
+      'Reportar los parámetros efectivos <b>c′ y φ′</b> además de los totales, e incluir el modo de falla y el contenido de humedad final.'
+    ],
+    CD:[
+      'La velocidad debe ser lo bastante lenta para que <b>no se acumule exceso de presión de poros</b>: se deriva del tiempo de consolidación y resulta considerablemente menor que en CU.',
+      'Verificación en tiempo real: si el transductor de poros <b>no permanece plano en el valor de BP</b>, la velocidad es demasiado alta y debe reducirse.',
+      'Criterio de falla: <b>máximo esfuerzo desviador</b> o <span class="val">15 % de deformación axial</span>, lo que ocurra primero.',
+      'Medir el <b>cambio de volumen</b> durante todo el corte: en CD sustituye a la medición de exceso de poros como variable de estado.',
+      'Aplicar <b>corrección de área</b> (usando el cambio de volumen real, no la hipótesis de volumen constante), <b>corrección por membrana</b> y por papel filtro.',
+      'Reportar <b>c′ y φ′</b> directamente en esfuerzos efectivos, ya que u permanece controlada durante todo el ensayo.'
+    ]
+  }
+};
+
+function astmBlock(faseKey, tipo){
+  const req=(NORMA_REQ[faseKey]||{})[tipo];
+  if(!req || !req.length) return '';
+  const ref=NORMA_REF[tipo];
+  const items=req.map(r=>`<li>${r}</li>`).join('');
+  return `<div class="astm">
+    <div class="astm-h"><b>${ref.cod}</b> requisitos aplicables a esta etapa</div>
+    <ul>${items}</ul>
+  </div>`;
+}
+
 const UU_NOTE_HTML = `<div class="tip" style="margin:16px 20px 0">
   <b>UU no lleva saturación ni consolidación con BP controlada.</b> Se monta la muestra y se aplica directamente una presión de cámara total (sin distinguir efectivo) por muestra, y se corta sin abrir drenaje. Las tres muestras se ensayan a tres presiones de cámara total distintas para trazar la envolvente total (φᵤ ≈ 0 en suelos saturados).
 </div>`;
@@ -586,7 +763,7 @@ function buildFases(tipo){
     'Montar la membrana de látex con ligera succión para que se adhiera',
     'Sellar con o-rings abajo (pedestal) y arriba (cabezal); normalmente dos en cada extremo',
     'Colocar el cabezal superior de arriba hacia abajo'
-  ], tip:'Las <b>piedras porosas</b> permiten el drenaje y la medición de presión de poros por ambos extremos; el <b>papel filtro</b> evita que los finos las taponen. Las <b>tiras laterales</b> aportan drenaje radial extra, útil sobre todo en CD. La <b>membrana</b> aísla la muestra del agua de confinamiento.'});
+  ], tip:'Las <b>piedras porosas</b> permiten el drenaje y la medición de presión de poros por ambos extremos; el <b>papel filtro</b> evita que los finos las taponen. Las <b>tiras laterales</b> aportan drenaje radial extra, útil sobre todo en CD. La <b>membrana</b> aísla la muestra del agua de confinamiento.', extra:astmBlock('montaje',tipo)});
 
   fases.push({key:'cierre', fase:'Cierre y llenado de la cámara', etapa:'Preparación', pasos:[
     'Aplicar un pico de succión a la muestra para que se sostenga sin cámara',
@@ -598,7 +775,7 @@ function buildFases(tipo){
       ? 'Aplicar la presión de cámara total definida para cada muestra (ver tabla abajo)'
       : 'Aplicar una pequeña presión de cámara isotrópica (~40 kPa) para dejarla lista',
     '<b>Confirmar que la presión de cámara ya supera al vacío antes de liberar la succión</b> — retirarlo antes puede perturbar o colapsar la muestra'
-  ], tip:'El agua entra por abajo y <b>desplaza el aire</b> hacia la válvula de purga superior. Usar <b>agua desaireada</b> evita burbujas. ⚠ El orden entre "aplicar presión de cámara" y "liberar el vacío" es el error de técnica más común en este paso.', extra:esUU?(UU_NOTE_HTML+muestrasGridHtml('cpUU')):''});
+  ], tip:'El agua entra por abajo y <b>desplaza el aire</b> hacia la válvula de purga superior. Usar <b>agua desaireada</b> evita burbujas. ⚠ El orden entre "aplicar presión de cámara" y "liberar el vacío" es el error de técnica más común en este paso.', extra:(esUU?(UU_NOTE_HTML+muestrasGridHtml('cpUU')):'')+astmBlock('cierre',tipo)});
 
   if(!esUU){
     fases.push({key:'saturacion', fase:'Saturación', etapa:'Etapa 1', pasos:[
@@ -608,14 +785,14 @@ function buildFases(tipo){
       'Cerrar la válvula de drenaje para medir el parámetro B de Skempton',
       'Incrementar la presión de cámara un valor conocido (ej. 50 kPa) y leer el cambio de presión de poros',
       'Confirmar B = Δu/Δσ₃ ≥ 0,95 al llegar al BP objetivo definido abajo; si no sube, revisar aire atrapado y continuar saturando'
-    ], tip:'<b>B de Skempton</b> = Δu/Δσ₃. Si el suelo está saturado, el agua (incompresible) toma casi todo el incremento y B→1. Para acelerar: agua desaireada y subir presión externa e interna <b>simultáneamente</b> (no cambia el esfuerzo efectivo, disuelve el aire). Es la etapa más lenta: puede durar un día o más.', extra:rampConfigHtml()+SAT_DIAGRAMS});
+    ], tip:'<b>B de Skempton</b> = Δu/Δσ₃. Si el suelo está saturado, el agua (incompresible) toma casi todo el incremento y B→1. Para acelerar: agua desaireada y subir presión externa e interna <b>simultáneamente</b> (no cambia el esfuerzo efectivo, disuelve el aire). Es la etapa más lenta: puede durar un día o más.', extra:rampConfigHtml()+SAT_DIAGRAMS+astmBlock('saturacion',tipo)});
 
     fases.push({key:'consolidacion', fase:'Consolidación', etapa:'Etapa 2', pasos:[
       'Consolidar cada muestra hasta su propio esfuerzo efectivo objetivo σ\'3 (ver tabla abajo)',
       'Abrir la válvula de drenaje y dejar disipar el exceso de presión de poros',
       'Registrar el cambio de volumen vs. tiempo (curva de Taylor) y anotar t50 y t100 — se usan para fijar la velocidad del corte',
       'Terminar cuando la presión de poros baje hasta igualar la contrapresión'
-    ], tip:'A diferencia del corte directo (unidimensional), aquí la consolidación es <b>isotrópica</b>. El <b>esfuerzo efectivo</b> = presión de cámara − contrapresión: cada muestra tiene su propio objetivo, mostrado en la tabla.', extra:muestrasGridHtml('sigma')+CONSOL_EXTRA});
+    ], tip:'A diferencia del corte directo (unidimensional), aquí la consolidación es <b>isotrópica</b>. El <b>esfuerzo efectivo</b> = presión de cámara − contrapresión: cada muestra tiene su propio objetivo, mostrado en la tabla.', extra:muestrasGridHtml('sigma')+CONSOL_EXTRA+astmBlock('consolidacion',tipo)});
   }
 
   const corteDrenaje = esUU
@@ -639,7 +816,7 @@ function buildFases(tipo){
     'Aplicar corrección por membrana (y por tiras de papel filtro, si se usaron) al esfuerzo medido',
     'Desmontar, fotografiar y medir el plano y ángulo de falla a corte',
     'Pesar húmeda y seca (horno): γ, γ_sat, relación de vacíos y grado de saturación inicial/final'
-  ], tip:'El <b>esfuerzo desviador</b> (σ₁ − σ₃) es el que cuenta en la falla. Se necesitan <b>tres muestras</b> a distintos confinamientos para trazar la envolvente de Mohr-Coulomb y leer c′ y φ′. Las correcciones de área y de membrana afectan directamente ese resultado.', extra:(CORTE_INFO[tipo]||'')+ERROR_TABLE_HTML});
+  ], tip:'El <b>esfuerzo desviador</b> (σ₁ − σ₃) es el que cuenta en la falla. Se necesitan <b>tres muestras</b> a distintos confinamientos para trazar la envolvente de Mohr-Coulomb y leer c′ y φ′. Las correcciones de área y de membrana afectan directamente ese resultado.', extra:(CORTE_INFO[tipo]||'')+astmBlock('falla',tipo)+ERROR_TABLE_HTML});
 
   return fases;
 }
@@ -654,6 +831,78 @@ const PARTS = [
   {id:"p-oring",t:"O-rings (puntas tóricas)",d:"Anillos de sello. Sellan la membrana contra el pedestal y el cabezal para impedir fugas. Normalmente se ponen dos en cada extremo."},
   {id:"p-cabezal",t:"Cabezal superior",d:"Tapa la muestra por arriba, conecta con el drenaje superior y recibe la carga axial del pistón."},
   {id:"p-piston",t:"Eje / pistón de carga axial",d:"Aplica el esfuerzo desviador. En la prensa, un motor lo desplaza a velocidad controlada mientras la celda de carga mide la fuerza."}
+];
+
+const FORMULAS = [
+  {etapa:'Saturación · Etapa 1', t:'Parámetro B de Skempton',
+   eq:'<i>B</i> <span class="op">=</span> <span class="frac"><span class="num">Δ<i>u</i></span><span class="den">Δσ<sub>3</sub></span></span>',
+   vars:[['B','parámetro de saturación (adimensional)'],['Δu','cambio en la presión de poros medido, kPa'],['Δσ₃','incremento aplicado a la presión de cámara, kPa']],
+   nota:'Se mide con el <b>drenaje cerrado</b>. Si el suelo está saturado el agua toma casi todo el incremento y B→1. Criterio de aceptación en el laboratorio: <b>B ≥ 0,95</b>.'},
+
+  {etapa:'Saturación · Etapa 1', t:'Brecha de control CP − BP',
+   eq:'σ′<sub>3</sub> <span class="op">=</span> CP <span class="op">−</span> BP',
+   vars:[['CP','presión de cámara (cell pressure), kPa'],['BP','contrapresión (back pressure), kPa'],['σ′₃','esfuerzo efectivo de confinamiento, kPa']],
+   nota:'Durante la saturación esta diferencia se mantiene <b>pequeña y constante</b> (p. ej. 10 kPa): así se sube la presión total sin alterar el esfuerzo efectivo, disolviendo el aire sin deformar la muestra.'},
+
+  {etapa:'Consolidación · Etapa 2', t:'Esfuerzo efectivo de consolidación',
+   eq:'σ′ <span class="op">=</span> σ <span class="op">−</span> <i>u</i>',
+   vars:[['σ′','esfuerzo efectivo, kPa'],['σ','esfuerzo total aplicado, kPa'],['u','presión de poros, kPa']],
+   nota:'Principio de <b>Terzaghi</b>, la base de todo el ensayo. En consolidación isotrópica: σ′₃ = CP − BP. Ejemplo: 350 − 300 = <b>50 kPa</b> efectivos.'},
+
+  {etapa:'Consolidación · Etapa 2', t:'Velocidad de deformación para el corte',
+   eq:'<i>v</i> <span class="op">=</span> <span class="frac"><span class="num">ε<sub>f</sub> · <i>H</i></span><span class="den">10 · <i>t</i><sub>50</sub></span></span>',
+   vars:[['v','velocidad de deformación axial, mm/min'],['ε_f','deformación estimada en falla (≈0,15–0,20)'],['H','altura de la muestra, mm'],['t₅₀','tiempo al 50 % de consolidación, min']],
+   nota:'Criterio tipo <b>ASTM D4767</b> para CU: la velocidad debe ser lo bastante lenta para que la presión de poros se iguale dentro de la muestra. Para <b>CD</b> el factor es mucho mayor (drenaje completo), resultando en velocidades bastante más lentas.'},
+
+  {etapa:'Falla · Etapa 3', t:'Esfuerzo desviador',
+   eq:'<i>q</i> <span class="op">=</span> σ<sub>1</sub> <span class="op">−</span> σ<sub>3</sub> <span class="op">=</span> <span class="frac"><span class="num"><i>P</i></span><span class="den"><i>A</i><sub>c</sub></span></span>',
+   vars:[['q','esfuerzo desviador, kPa'],['σ₁','esfuerzo axial total (mayor), kPa'],['σ₃','esfuerzo radial = CP, kPa'],['P','carga axial de la celda de carga, kN'],['A_c','área corregida de la sección, m²']],
+   nota:'Es el esfuerzo que <b>realmente falla</b> la muestra. σ₃ permanece constante mientras el pistón hace crecer σ₁.'},
+
+  {etapa:'Falla · Etapa 3', t:'Corrección de área',
+   eq:'<i>A</i><sub>c</sub> <span class="op">=</span> <span class="frac"><span class="num"><i>A</i><sub>0</sub></span><span class="den">1 <span class="op">−</span> ε<sub>a</sub></span></span>',
+   vars:[['A_c','área corregida, m²'],['A₀','área inicial de la muestra, m²'],['ε_a','deformación axial = ΔH / H₀']],
+   nota:'A medida que la muestra se acorta, <b>se ensancha</b>: si no se corrige el área, el esfuerzo desviador queda sobreestimado. Esta forma asume volumen constante (válida en ensayos no drenados, CU y UU).'},
+
+  {etapa:'Falla · Etapa 3', t:'Corrección por membrana',
+   eq:'Δ(σ<sub>1</sub><span class="op">−</span>σ<sub>3</sub>) <span class="op">=</span> <span class="frac"><span class="num">4 · <i>E</i><sub>m</sub> · <i>t</i><sub>m</sub> · ε<sub>a</sub></span><span class="den"><i>D</i><sub>c</sub></span></span>',
+   vars:[['E_m','módulo de elasticidad de la membrana, kPa'],['t_m','espesor de la membrana, m'],['ε_a','deformación axial'],['D_c','diámetro corregido de la muestra, m']],
+   nota:'La membrana de látex <b>aporta resistencia propia</b> que se suma a la del suelo. La norma exige aplicar esta corrección cuando el aporte supera el <b>5 %</b> del esfuerzo desviador — algo frecuente en suelos blandos.'},
+
+  {etapa:'Falla · Etapa 3', t:'Corrección por papel filtro lateral',
+   eq:'Δ(σ<sub>1</sub><span class="op">−</span>σ<sub>3</sub>) <span class="op">=</span> <span class="frac"><span class="num"><i>K</i><sub>fp</sub> · <i>P</i><sub>fp</sub></span><span class="den"><i>A</i><sub>c</sub></span></span>',
+   vars:[['K_fp','resistencia del papel filtro por unidad de longitud, kN/m'],['P_fp','perímetro cubierto por las tiras, m'],['A_c','área corregida de la muestra, m²']],
+   nota:'Solo aplica si se usaron <b>tiras verticales de drenaje</b>. Se descuenta del desviador medido. Si no se corrige, la resistencia del suelo queda <b>sobreestimada</b>.'},
+
+  {etapa:'Falla · Etapa 3', t:'Envolvente de Mohr-Coulomb',
+   eq:'τ <span class="op">=</span> <i>c</i>′ <span class="op">+</span> σ′ · tan φ′',
+   vars:[['τ','resistencia al corte, kPa'],['c′','cohesión efectiva (intercepto), kPa'],['σ′','esfuerzo normal efectivo, kPa'],['φ′','ángulo de fricción interna efectivo, grados']],
+   nota:'El objetivo final del ensayo: con los círculos de <b>tres muestras</b> a distintos confinamientos se traza la recta tangente y se leen <b>c′</b> (intercepto) y <b>φ′</b> (pendiente).'},
+
+  {etapa:'Falla · Etapa 3', t:'Ángulo teórico del plano de falla',
+   eq:'θ <span class="op">=</span> 45° <span class="op">+</span> <span class="frac"><span class="num">φ′</span><span class="den">2</span></span>',
+   vars:[['θ','ángulo del plano de falla respecto a la horizontal'],['φ′','ángulo de fricción interna efectivo, grados']],
+   nota:'Sirve como <b>chequeo de coherencia</b>: al desmontar se mide el ángulo real del plano de falla y se compara con el que predice el φ′ obtenido.'},
+
+  {etapa:'Procesamiento de datos', t:'Relación entre σ₁ y σ₃ en la falla',
+   eq:'σ′<sub>1</sub> <span class="op">=</span> σ′<sub>3</sub> · <i>N</i><sub>φ</sub> <span class="op">+</span> 2<i>c</i>′ √<span style="border-top:1.5px solid;padding:0 .15em"><i>N</i><sub>φ</sub></span>',
+   vars:[['N_φ','tan²(45° + φ′/2), coeficiente de empuje pasivo'],['σ′₁','esfuerzo efectivo mayor en falla, kPa'],['σ′₃','esfuerzo efectivo menor en falla, kPa'],['c′','cohesión efectiva, kPa']],
+   nota:'Forma algebraica equivalente a la envolvente. Útil para <b>verificar numéricamente</b> los parámetros ajustados sin depender del trazado gráfico de los círculos.'},
+
+  {etapa:'Procesamiento de datos', t:'Trayectoria de esfuerzos (diagrama p′–q)',
+   eq:'<i>p</i>′ <span class="op">=</span> <span class="frac"><span class="num">σ′<sub>1</sub> + 2σ′<sub>3</sub></span><span class="den">3</span></span><span class="op">,</span> <i>q</i> <span class="op">=</span> σ<sub>1</sub> <span class="op">−</span> σ<sub>3</sub>',
+   vars:[['p′','esfuerzo efectivo medio, kPa'],['q','esfuerzo desviador, kPa']],
+   nota:'En <b>CU</b> la trayectoria se curva hacia la izquierda si el suelo es contractivo (u sube) o hacia la derecha si es dilatante (u baja). Es la mejor forma de ver el comportamiento completo, no solo el punto de falla.'},
+
+  {etapa:'Datos finales', t:'Contenido de humedad y peso unitario',
+   eq:'<i>w</i> <span class="op">=</span> <span class="frac"><span class="num"><i>M</i><sub>w</sub> <span class="op">−</span> <i>M</i><sub>s</sub></span><span class="den"><i>M</i><sub>s</sub></span></span> <span class="op">×</span> 100<span class="op">,</span> γ <span class="op">=</span> <span class="frac"><span class="num"><i>W</i></span><span class="den"><i>V</i></span></span>',
+   vars:[['w','contenido de humedad, %'],['M_w','masa húmeda, g'],['M_s','masa seca al horno, g'],['γ','peso unitario, kN/m³'],['V','volumen de la muestra, m³']],
+   nota:'Se obtienen al desmontar. La <b>masa húmeda inicial y las dimensiones</b> deben tomarse antes de colocar la membrana — es el único momento posible.'},
+
+  {etapa:'Datos finales', t:'Relación de vacíos y grado de saturación',
+   eq:'<i>e</i> <span class="op">=</span> <span class="frac"><span class="num"><i>G</i><sub>s</sub> · γ<sub>w</sub></span><span class="den">γ<sub>d</sub></span></span> <span class="op">−</span> 1<span class="op">,</span> <i>S</i> <span class="op">=</span> <span class="frac"><span class="num"><i>w</i> · <i>G</i><sub>s</sub></span><span class="den"><i>e</i></span></span>',
+   vars:[['e','relación de vacíos'],['G_s','gravedad específica de los sólidos (≈2,65)'],['γ_w','peso unitario del agua, 9,81 kN/m³'],['γ_d','peso unitario seco, kN/m³'],['S','grado de saturación, %']],
+   nota:'Verificación final: si la saturación fue correcta, <b>S debe salir cercano al 100 %</b>. Un valor bajo indica que la etapa de saturación no se completó y los parámetros efectivos quedan en duda.'}
 ];
 
 const MOHR = [
@@ -700,6 +949,8 @@ tabBtns.forEach(b=>b.addEventListener('click',()=>{
 function renderChecklist(){
   const tipo=AppState.tipo;
   const fases=buildFases(tipo);
+  const nEl=document.getElementById('msNorma');
+  if(nEl){ const r=NORMA_REF[tipo]; nEl.innerHTML=`<b>${r.cod}</b><span>${r.nom}</span>`; }
   const checkedSet=new Set(AppState.checked);
   const clWrap=document.getElementById('checklist');
   clWrap.innerHTML='';
@@ -754,6 +1005,15 @@ document.getElementById('checklist').addEventListener('input',e=>{
 
 document.getElementById('checklist').addEventListener('click',e=>{
   if(e.target.id==='genRampa') generarRampa();
+});
+
+const fxGrid=document.getElementById('fxGrid');
+FORMULAS.forEach(f=>{
+  const el=document.createElement('div');
+  el.className='fx';
+  const vars=f.vars.map(v=>`<li><b>${v[0]}</b><span>${v[1]}</span></li>`).join('');
+  el.innerHTML=`<span class="etapa">${f.etapa}</span><h4>${f.t}</h4><div class="eq">${f.eq}</div><ul class="vars">${vars}</ul><div class="nota">${f.nota}</div>`;
+  fxGrid.appendChild(el);
 });
 
 const partsWrap=document.getElementById('parts');
