@@ -226,6 +226,19 @@
   .astm li b{color:#1f4d66}
   .astm .val{font-family:"IBM Plex Mono",monospace;font-size:13px;color:#1f4d66;font-weight:600}
 
+  .curve-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(430px,100%),1fr));gap:26px;margin-top:8px}
+  .curve-card{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:24px 26px;border-left:4px solid var(--ambar)}
+  .curve-card.dilat{border-left-color:var(--verde)}
+  .curve-card h3{font-size:18.5px;color:var(--verde);margin-bottom:2px}
+  .curve-card .ctag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:#a06b12;margin-bottom:14px;display:block}
+  .curve-card.dilat .ctag{color:var(--verde-claro)}
+  .curve-card svg{width:100%;height:auto;display:block}
+  .curve-card .cc-cap{font-family:"IBM Plex Mono",monospace;font-size:10px;color:#8a8974;text-align:center;margin-top:2px}
+  .curve-card ul.interp{list-style:none;margin-top:14px;padding:0}
+  .curve-card ul.interp li{font-size:14px;color:#54544a;padding:7px 0 7px 18px;border-top:1px dashed var(--linea);position:relative;line-height:1.5}
+  .curve-card ul.interp li:first-child{border-top:none}
+  .curve-card ul.interp li::before{content:"▸";position:absolute;left:0;color:var(--ambar)}
+  .curve-card.dilat ul.interp li::before{color:var(--verde-claro)}
   .spec-group{margin-bottom:30px}
   .spec-group>h3{font-size:19px;color:var(--verde);margin-bottom:4px}
   .spec-group>p.gd{font-size:14.5px;color:#54544a;margin-bottom:12px;max-width:74ch}
@@ -313,6 +326,7 @@
     <button class="active" data-tab="check">✓ Checklist del ensayo</button>
     <button data-tab="info">◈ Anatomía del montaje</button>
     <button data-tab="mohr">◐ Círculo de Mohr</button>
+    <button data-tab="curvas">◔ Curvas típicas</button>
     <button data-tab="monitor">◉ Monitoreo</button>
     <button data-tab="formulas">∑ Fórmulas</button>
     <button data-tab="equipo">⚙ Equipo y tolerancias</button>
@@ -429,7 +443,7 @@
     <div class="sec-head">
       <div class="kicker">De la práctica a la teoría</div>
       <h2>Del círculo de Mohr a la trayectoria p′–q</h2>
-      <p>Tal como lo explicó el profesor: antes de fallar, los tres esfuerzos son iguales (σ₁ = σ₃) y el círculo es apenas un punto. Al aplicar la carga axial, σ₁ crece y el círculo se abre hasta tocar la envolvente. <b>Los tres paneles muestran el mismo ensayo</b> en tres lenguajes distintos: círculos, trayectoria de esfuerzos y curva esfuerzo-deformación — lo que se ve en la prensa mientras el ensayo corre. Avanza con los botones.</p>
+      <p>Tal como lo explicó el profesor: antes de fallar, los tres esfuerzos son iguales (σ₁ = σ₃) y el círculo es apenas un punto. Al aplicar la carga axial, σ₁ crece y el círculo se abre hasta tocar la envolvente. <b>Los dos paneles muestran el mismo ensayo</b> en dos lenguajes: a la izquierda como círculos, a la derecha como una trayectoria — cada círculo se resume en un punto, y el ensayo completo se vuelve una curva continua. Avanza con los botones.</p>
     </div>
     <div class="mohr-wrap">
       <div class="mohr-duo">
@@ -478,31 +492,192 @@
             <text id="pqDotLab" x="212" y="284" font-size="10.5" fill="#54544a" font-family="monospace">σ₁ = σ₃ · q = 0</text>
           </svg>
         </div>
-        <div>
-          <h4>Curva esfuerzo–deformación</h4>
-          <p class="sub">q vs εa · lo que se mide en vivo</p>
-          <svg id="qeSvg" viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg">
-            <line x1="70" y1="290" x2="530" y2="290" stroke="#6b6a5c" stroke-width="1.5"/>
-            <line x1="70" y1="290" x2="70" y2="30" stroke="#6b6a5c" stroke-width="1.5"/>
-            <text x="524" y="308" font-size="13" fill="#54544a" font-family="monospace">εa</text>
-            <text x="52" y="40" font-size="13" fill="#54544a" font-family="monospace">q</text>
-            <line x1="460" y1="290" x2="460" y2="30" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="466" y="304" font-size="10" fill="#8a8974" font-family="monospace">≈15 %</text>
-            <path id="qeTrunk" d="M70,290 L70,290" fill="none" stroke="#27500A" stroke-width="2.6"/>
-            <path id="qeEspC" d="M330,160 C350,166 372,180 388,200 C398,213 405,224 410,234" fill="none" stroke="#EF9F27" stroke-width="2.6" opacity="0"/>
-            <path id="qeEspD" d="M330,160 C352,150 378,133 398,116 C412,104 420,94 426,84" fill="none" stroke="#27500A" stroke-width="2.6" opacity="0"/>
-            <text id="qeEspCLab" x="336" y="220" font-size="10.5" fill="#b8811c" font-family="monospace" opacity="0">contractivo: pico y reblandece</text>
-            <text id="qeEspDLab" x="352" y="76" font-size="10.5" fill="#27500A" font-family="monospace" opacity="0">dilatante: sigue subiendo</text>
-            <circle id="qeDot" cx="70" cy="290" r="6" fill="#27500A"/>
-            <text id="qeDotLab" x="82" y="284" font-size="10.5" fill="#54544a" font-family="monospace">ε=0 · q=0</text>
-          </svg>
-        </div>
       </div>
       <div class="mohr-step-info" id="mohrInfo"></div>
       <div class="mohr-controls">
         <button class="btn ghost sm" id="mohrPrev">← Atrás</button>
         <button class="btn sm" id="mohrNext">Siguiente →</button>
       </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:48px">
+      <div class="kicker">La pregunta del millón</div>
+      <h2>¿Restar u para obtener qué?</h2>
+      <p>La máquina mide σ₁ y σ₃ — esfuerzos <b>totales</b>, los que realmente aplica el pistón y la cámara. En CU también se mide u con el transductor. Pero la resistencia del suelo no depende de σ, depende de <b>σ′ = σ − u</b>. Este panel, aparte del anterior, muestra exactamente qué le pasa al círculo cuando se hace esa resta.</p>
+    </div>
+    <div class="mohr-wrap">
+      <svg id="effSvg" viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" style="max-width:700px">
+        <line x1="60" y1="260" x2="660" y2="260" stroke="#6b6a5c" stroke-width="1.5"/>
+        <line x1="60" y1="260" x2="60" y2="20" stroke="#6b6a5c" stroke-width="1.5"/>
+        <text x="640" y="278" font-size="13" fill="#54544a" font-family="monospace">σ, σ′ →</text>
+        <text x="42" y="30" font-size="13" fill="#54544a" font-family="monospace">τ</text>
+
+        <circle id="effTotal" cx="350" cy="260" r="90" fill="none" stroke="#8a5a10" stroke-width="2.2" stroke-dasharray="6 4"/>
+        <text id="effTotalLab" x="350" y="253" font-size="11" fill="#8a5a10" font-family="monospace" text-anchor="middle">totales</text>
+        <circle id="effS3" cx="260" cy="260" r="3.6" fill="#8a5a10"/>
+        <text id="effS3Lab" x="260" y="278" font-size="11" fill="#8a5a10" font-family="monospace" text-anchor="middle">σ₃</text>
+        <circle id="effS1" cx="440" cy="260" r="3.6" fill="#8a5a10"/>
+        <text id="effS1Lab" x="440" y="278" font-size="11" fill="#8a5a10" font-family="monospace" text-anchor="middle">σ₁</text>
+
+        <line id="effArrow3" x1="260" y1="240" x2="170" y2="240" stroke="#3a72a4" stroke-width="2" marker-end="url(#effAr)" opacity="0"/>
+        <line id="effArrow1" x1="440" y1="240" x2="350" y2="240" stroke="#3a72a4" stroke-width="2" marker-end="url(#effAr)" opacity="0"/>
+        <text id="effULab" x="305" y="228" font-size="11" fill="#3a72a4" font-family="monospace" text-anchor="middle" opacity="0">−u</text>
+        <text id="effFormula" x="380" y="46" font-size="15" fill="#3a72a4" font-family="monospace" text-anchor="middle" opacity="0">σ′ = σ − u</text>
+
+        <circle id="effEff" cx="260" cy="260" r="90" fill="rgba(39,80,10,.1)" stroke="#27500A" stroke-width="2.4" opacity="0"/>
+        <text id="effEffLab" x="260" y="163" font-size="11" fill="#27500A" font-family="monospace" text-anchor="middle" opacity="0">efectivos</text>
+        <circle id="effS3p" cx="170" cy="260" r="3.6" fill="#27500A" opacity="0"/>
+        <text id="effS3pLab" x="170" y="278" font-size="11" fill="#27500A" font-family="monospace" text-anchor="middle" opacity="0">σ′₃</text>
+        <circle id="effS1p" cx="350" cy="260" r="3.6" fill="#27500A" opacity="0"/>
+        <text id="effS1pLab" x="350" y="243" font-size="11" fill="#27500A" font-family="monospace" text-anchor="middle" opacity="0">σ′₁</text>
+
+        <line id="effEnv" x1="60" y1="250" x2="470" y2="90" stroke="#b0432f" stroke-width="2" stroke-dasharray="6 4" opacity="0"/>
+        <text id="effEnvLab" x="380" y="98" font-size="11" fill="#b0432f" font-family="monospace" opacity="0">τ = c′ + σ′·tanφ′</text>
+        <circle id="effTangent" cx="260" cy="171" r="5" fill="#b0432f" opacity="0"/>
+        <text id="effTangentLab" x="270" y="164" font-size="10.5" fill="#b0432f" font-family="monospace" opacity="0">toca aquí</text>
+        <text id="effNoTouch" x="350" y="200" font-size="10.5" fill="#8a5a10" font-family="monospace" text-anchor="middle" opacity="0">el total no la toca</text>
+
+        <defs><marker id="effAr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#3a72a4"/></marker></defs>
+      </svg>
+      <div class="mohr-step-info" id="effInfo"></div>
+      <div class="mohr-controls">
+        <button class="btn ghost sm" id="effPrev">← Atrás</button>
+        <button class="btn sm" id="effNext">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="curvas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Práctica de lectura</div>
+      <h2>Curvas típicas: cómo interpretarlas</h2>
+      <p>Cuatro casos clásicos, cada uno en su propia tarjeta. Arena y arcilla se emparejan aquí con el ensayo donde más se aprovecha su instrumentación: <b>arena con CD</b> (mide cambio de volumen) y <b>arcilla con CU</b> (mide presión de poros) — nada impide lo contrario, pero ahí no se ve tanto. Fíjate en el mismo detalle en los cuatro: <b>hay o no hay pico</b>, y qué hace la segunda curva mientras tanto.</p>
+    </div>
+    <div class="curve-grid">
+
+      <div class="curve-card">
+        <span class="ctag">CD · suelo suelto / normalmente consolidado</span>
+        <h3>Arena suelta — contractivo</h3>
+        <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="150" x2="380" y2="150" stroke="#6b6a5c" stroke-width="1.3"/>
+          <line x1="40" y1="150" x2="40" y2="20" stroke="#6b6a5c" stroke-width="1.3"/>
+          <text x="8" y="30" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="328" y="166" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <line x1="40" y1="70" x2="380" y2="70" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="300" y="65" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">q crítico</text>
+          <path d="M40,150 C90,110 150,85 220,74 C270,68 330,70 380,70" fill="none" stroke="var(--ambar)" stroke-width="2.6"/>
+        </svg>
+        <div class="cc-cap">q vs εa — sin pico</div>
+        <svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg" style="margin-top:10px">
+          <line x1="40" y1="25" x2="380" y2="25" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="8" y="20" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εv</text>
+          <text x="358" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <text x="328" y="126" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,25 C110,55 200,80 280,92 C320,98 360,102 380,104" fill="none" stroke="var(--ambar)" stroke-width="2.6"/>
+          <text x="230" y="118" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">compresión continua</text>
+        </svg>
+        <div class="cc-cap">εv vs εa — abajo = comprime</div>
+        <ul class="interp">
+          <li>Sin pico: q crece hasta un valor <b>último (crítico)</b> y se queda ahí.</li>
+          <li>εv sigue bajando (comprimiendo) durante todo el corte, sin cruzar a dilatancia.</li>
+          <li>El φ′ que se lee aquí <b>ya es</b> el φ′ crítico — no hay pico que confundir con él.</li>
+        </ul>
+      </div>
+
+      <div class="curve-card dilat">
+        <span class="ctag">CD · suelo denso / sobreconsolidado</span>
+        <h3>Arena densa — dilatante</h3>
+        <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="150" x2="380" y2="150" stroke="#6b6a5c" stroke-width="1.3"/>
+          <line x1="40" y1="150" x2="40" y2="20" stroke="#6b6a5c" stroke-width="1.3"/>
+          <text x="8" y="30" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="328" y="166" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <line x1="40" y1="70" x2="380" y2="70" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="292" y="65" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">q crítico (igual)</text>
+          <path d="M40,150 C80,90 120,55 160,48 C185,44 205,50 230,62 C270,80 320,72 380,70" fill="none" stroke="var(--verde)" stroke-width="2.6"/>
+          <circle cx="160" cy="47" r="4" fill="var(--verde)"/>
+          <text x="150" y="38" font-size="9" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">pico</text>
+        </svg>
+        <div class="cc-cap">q vs εa — pico y reblandece</div>
+        <svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg" style="margin-top:10px">
+          <line x1="40" y1="25" x2="380" y2="25" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="8" y="20" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εv</text>
+          <text x="358" y="20" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <text x="328" y="126" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,25 C70,28 90,30 120,33 C145,31 165,20 175,18 C190,12 205,6 230,3 C270,1 320,2 380,4" fill="none" stroke="var(--verde)" stroke-width="2.6"/>
+          <circle cx="168" cy="25" r="3.6" fill="var(--verde-claro)"/>
+          <text x="178" y="45" font-size="8.5" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">cambio de fase</text>
+        </svg>
+        <div class="cc-cap">εv vs εa — arriba = dilata</div>
+        <ul class="interp">
+          <li>Pico marcado a baja deformación, luego cae hasta el <b>mismo</b> valor último que la arena suelta — es el mismo material, cambia el estado inicial.</li>
+          <li>εv comprime un poco y luego sube cruzando el cero: ese cruce es el <b>punto de cambio de fase</b>.</li>
+          <li>El φ′ de pico es mayor que el crítico; para diseño a largo plazo suele preferirse el crítico.</li>
+        </ul>
+      </div>
+
+      <div class="curve-card">
+        <span class="ctag">CU · arcilla normalmente consolidada</span>
+        <h3>Arcilla NC — contractivo</h3>
+        <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="150" x2="380" y2="150" stroke="#6b6a5c" stroke-width="1.3"/>
+          <line x1="40" y1="150" x2="40" y2="20" stroke="#6b6a5c" stroke-width="1.3"/>
+          <text x="8" y="30" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="328" y="166" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,150 C95,108 155,82 220,72 C270,66 330,68 380,68" fill="none" stroke="var(--ambar)" stroke-width="2.6"/>
+          <text x="280" y="58" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">plateau, sin pico</text>
+        </svg>
+        <div class="cc-cap">q vs εa — análoga a la arena suelta</div>
+        <svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg" style="margin-top:10px">
+          <line x1="40" y1="65" x2="380" y2="65" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="8" y="20" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
+          <text x="358" y="60" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <text x="328" y="126" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,65 C90,50 140,32 190,22 C230,16 280,15 330,16 C350,16 365,17 380,18" fill="none" stroke="var(--ambar)" stroke-width="2.6"/>
+          <text x="235" y="35" font-size="9" fill="#b8811c" font-family="IBM Plex Mono,monospace">Δu &gt; 0 · sube y se queda</text>
+        </svg>
+        <div class="cc-cap">Δu vs εa — arriba = positivo</div>
+        <ul class="interp">
+          <li>Comportamiento análogo a la arena suelta: sin pico marcado, plateau hacia un valor último.</li>
+          <li>Δu sube y se queda positivo: el agua absorbe parte del esfuerzo, así que σ′₃ cae por debajo de σ₃.</li>
+          <li>σ′₁ y σ′₃ se leen restando ese Δu — el mismo principio del panel anterior.</li>
+        </ul>
+      </div>
+
+      <div class="curve-card dilat">
+        <span class="ctag">CU · arcilla sobreconsolidada</span>
+        <h3>Arcilla OC — dilatante</h3>
+        <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="150" x2="380" y2="150" stroke="#6b6a5c" stroke-width="1.3"/>
+          <line x1="40" y1="150" x2="40" y2="20" stroke="#6b6a5c" stroke-width="1.3"/>
+          <text x="8" y="30" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">q</text>
+          <text x="328" y="166" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,150 C75,95 110,58 145,48 C170,42 190,50 215,64 C260,84 320,64 380,55" fill="none" stroke="var(--verde)" stroke-width="2.6"/>
+          <circle cx="145" cy="47" r="4" fill="var(--verde)"/>
+          <text x="132" y="38" font-size="9" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">pico marcado</text>
+          <text x="300" y="48" font-size="8.5" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">&gt; que NC</text>
+        </svg>
+        <div class="cc-cap">q vs εa — pico más alto que NC</div>
+        <svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg" style="margin-top:10px">
+          <line x1="40" y1="65" x2="380" y2="65" stroke="var(--linea)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="8" y="20" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">Δu</text>
+          <text x="358" y="60" font-size="9" fill="#8a8974" font-family="IBM Plex Mono,monospace">0</text>
+          <text x="328" y="126" font-size="9.5" fill="#8a8974" font-family="IBM Plex Mono,monospace">εa →</text>
+          <path d="M40,65 C70,58 90,54 105,55 C125,57 140,63 155,72 C185,90 230,108 280,115 C320,118 350,119 380,119" fill="none" stroke="var(--verde)" stroke-width="2.6"/>
+          <circle cx="152" cy="66" r="3.6" fill="var(--verde-claro)"/>
+          <text x="160" y="90" font-size="8.5" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">cambia de signo</text>
+          <text x="260" y="112" font-size="9" fill="var(--verde-claro)" font-family="IBM Plex Mono,monospace">Δu &lt; 0 · succión</text>
+        </svg>
+        <div class="cc-cap">Δu vs εa — abajo = negativo</div>
+        <ul class="interp">
+          <li>Pico marcado, como la arena densa — la sobreconsolidación "densifica" el comportamiento aunque la relación de vacíos real sea otra.</li>
+          <li>Δu sube un poco y luego se vuelve <b>negativo</b>: el suelo quiere dilatarse pero el drenaje cerrado no lo permite, así que se genera succión.</li>
+          <li>Esa succión <b>sube</b> σ′₃ por encima del total: por eso un espécimen OC puede fallar a mayor q que uno NC con el mismo σ₃ total — el efectivo manda, no el total.</li>
+        </ul>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2125,26 +2300,6 @@ function drawMohr(){
   ['pqEspC','pqEspD','pqEspCLab','pqEspDLab','pqDu','pqDuLab','pqDotC','pqDotD']
     .forEach(id=>pqEl(id).setAttribute('opacity', s.esp?1:0));
 
-  /* --- panel q vs εa, mismo paso: cada círculo/punto se vuelve un punto en la curva --- */
-  const QE_X = {0:70,60:140,95:230,130:330};
-  function qeTrunkD(tt){
-    if(tt<=0) return 'M70,290 L70,290';
-    let d='M70,290 C95,265 115,240 140,230';
-    if(tt>=95) d+=' C175,222 205,208 230,195';
-    if(tt>=130) d+=' C265,182 300,170 330,160';
-    return d;
-  }
-  const ttClamped = t>=130?130:t;
-  pqEl('qeTrunk').setAttribute('d', qeTrunkD(ttClamped));
-  const qx=QE_X[ttClamped], qy=290-ttClamped;
-  const qeDot=pqEl('qeDot'), qeDotLab=pqEl('qeDotLab');
-  qeDot.setAttribute('cx',qx); qeDot.setAttribute('cy',qy);
-  qeDot.setAttribute('opacity', s.esp?0:1);
-  qeDotLab.setAttribute('opacity', s.esp?0:1);
-  qeDotLab.setAttribute('x', qx+10); qeDotLab.setAttribute('y', qy-8);
-  qeDotLab.textContent = ttClamped===0 ? 'ε=0 · q=0' : (s.kf ? 'pico · falla' : '(σ₁−σ₃)/2 creciendo');
-  ['qeEspC','qeEspD','qeEspCLab','qeEspDLab'].forEach(id=>pqEl(id).setAttribute('opacity', s.esp?1:0));
-
   mInfo.innerHTML=s.info;
   document.getElementById('mohrPrev').style.opacity=mStep===0?.4:1;
   document.getElementById('mohrNext').style.opacity=mStep===MOHR.length-1?.4:1;
@@ -2152,6 +2307,27 @@ function drawMohr(){
 document.getElementById('mohrNext').addEventListener('click',()=>{if(mStep<MOHR.length-1){mStep++;drawMohr()}});
 document.getElementById('mohrPrev').addEventListener('click',()=>{if(mStep>0){mStep--;drawMohr()}});
 drawMohr();
+
+/* ---------- Panel independiente: de esfuerzos totales a efectivos (σ′ = σ − u) ---------- */
+const EFF_STEPS = [
+  {show:[], info:'Durante el corte, el equipo mide σ₁ y σ₃ — los esfuerzos <b>totales</b>, los que realmente aplica el pistón y la presión de cámara. El círculo que se dibuja con estos dos valores tal cual, sin tocar nada más, es el círculo de esfuerzos totales.'},
+  {show:['effArrow3','effArrow1','effULab','effFormula'], info:'En CU también se mide <b>u</b> con el transductor de presión de poros. Se resta la <b>misma</b> u a los dos esfuerzos principales: <b>σ′₁ = σ₁ − u</b> y <b>σ′₃ = σ₃ − u</b>. Es una traslación pura sobre el eje σ — nada más cambia todavía.'},
+  {show:['effArrow3','effArrow1','effULab','effFormula','effEff','effEffLab','effS3p','effS3pLab','effS1p','effS1pLab'], info:'Aparece el círculo de esfuerzos <b>efectivos</b>: el mismo tamaño, desplazado exactamente u hacia la izquierda. Los dos círculos comparten el mismo diámetro (σ₁−σ₃), porque u se cancela al restar dentro de la diferencia — por eso <b>q es igual</b> en totales y en efectivos.'},
+  {show:['effArrow3','effArrow1','effULab','effFormula','effEff','effEffLab','effS3p','effS3pLab','effS1p','effS1pLab','effEnv','effEnvLab','effTangent','effTangentLab','effNoTouch'], info:'Y aquí está la razón de medir u: la resistencia depende del esfuerzo <b>efectivo</b>, no del total. La envolvente c′–φ′ se traza con los círculos <b>efectivos</b> — el círculo total, en general, ni siquiera la toca.'}
+];
+let effStep=0;
+const effInfo=document.getElementById('effInfo');
+function drawEff(){
+  const s=EFF_STEPS[effStep];
+  const allIds=['effArrow3','effArrow1','effULab','effFormula','effEff','effEffLab','effS3p','effS3pLab','effS1p','effS1pLab','effEnv','effEnvLab','effTangent','effTangentLab','effNoTouch'];
+  allIds.forEach(id=>{const el=document.getElementById(id); if(el) el.setAttribute('opacity', s.show.includes(id)?1:0);});
+  effInfo.innerHTML=s.info;
+  document.getElementById('effPrev').style.opacity=effStep===0?.4:1;
+  document.getElementById('effNext').style.opacity=effStep===EFF_STEPS.length-1?.4:1;
+}
+document.getElementById('effNext').addEventListener('click',()=>{if(effStep<EFF_STEPS.length-1){effStep++;drawEff()}});
+document.getElementById('effPrev').addEventListener('click',()=>{if(effStep>0){effStep--;drawEff()}});
+drawEff();
 
 let deck=[...CARDS],idx=0;
 const card=document.getElementById('card');
